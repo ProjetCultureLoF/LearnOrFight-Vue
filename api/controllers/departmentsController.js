@@ -1,10 +1,16 @@
-const { Department } = require('../models/departmentModel');
+const { Department, Theme } = require('../models/game/themeModel');
 
 
 async function getById(req, res){
     try{
         const { id } = req.params;
-        const department = await Department.findOne({ where: {ID_Department: id} });
+        const department = await Department.findOne({ 
+            where: {ID_Department: id}, 
+            include: [{
+                model: Theme,
+                through: { attributes: [] } 
+            }]
+         });
 
         res.status(200).json(department);
     }catch(error){
@@ -23,9 +29,37 @@ async function getAll(req, res){
         if(Name_Department){
             where.Name_Department = Name_Department
         }
-        const departments = await Department.findAll({ where });
-
+        const departments = await Department.findAll( {
+            include: [{
+                model: Theme,
+                through: { attributes: [] } 
+            }]
+        });
         res.status(200).json(departments);
+    }catch(error){
+        console.log(error);
+        res.status(400).json(error);
+    }
+};
+
+async function departmentAddTheme(req, res){
+    try{
+        const { id, themeId } = req.params;
+       
+        const department = await Department.findOne({ 
+            where: {ID_Department: id } 
+        });
+        const theme = await Theme.findOne({ 
+                where: {ID_Theme: themeId } 
+        });
+
+        await department.addTheme(theme);
+
+        const departmentTheme = await Department.findOne({ 
+            where: {ID_Department: id } 
+        });
+
+        res.status(200).json(departmentTheme);
     }catch(error){
         console.log(error);
         res.status(400).json(error);
@@ -95,4 +129,4 @@ async function deleteDepartmentQuery(req, res){
     }
 };
 
-module.exports = { getById, getAll, createDepartment, patchDepartment, deleteDepartmentQuery, deleteDepartment };
+module.exports = { getById, getAll, createDepartment, departmentAddTheme, patchDepartment, deleteDepartmentQuery, deleteDepartment };

@@ -1,4 +1,4 @@
-const { Clan } = require('../models/clanModel');
+const { Clan } = require('../models/client/clanModel');
 
 
 async function getById(req, res){

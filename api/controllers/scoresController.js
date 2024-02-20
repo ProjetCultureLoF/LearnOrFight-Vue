@@ -1,4 +1,4 @@
-const { Score } = require('../models/scoreModel');
+const { Score } = require('../models/client/scoreModel');
 
 async function getAll(req, res){
     try{

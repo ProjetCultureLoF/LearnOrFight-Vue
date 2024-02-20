@@ -1,4 +1,4 @@
-const { User } = require('../models/userModel');
+const { User } = require('../models/client/userModel');
 
 
 async function getByToken(req, res){

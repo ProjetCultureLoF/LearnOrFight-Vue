@@ -1,15 +1,15 @@
-const { db } = require("./db")
+const { db } = require("../db")
 const Sequelize = require('sequelize');
 
-const Department = db.define("department", {
-    ID_Department: {
+const Answer = db.define("answer", {
+    ID_Answer: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    Name_Department: {
+    Text_Answer: {
         type: Sequelize.STRING,
     }
 });
 
-module.exports = {db, Department};
+module.exports = {db, Answer};
