@@ -1,0 +1,150 @@
+/* Réinitialisation des styles de base */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Styles globaux de la page */
+body {
+  font-family: 'Arial', sans-serif;
+  background-image: url('/src/assets/background.png'); /* Ajoutez le chemin correct vers votre image de fond */
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  text-align: center; /* Centrer tout le contenu horizontalement */
+}
+
+/* Conteneur principal de la page */
+.main-content {
+  padding: 20px;
+}
+
+/* Styles pour la section d'introduction */
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.center-content h1,
+.center-content p {
+  font-family: 'Press Start 2P', cursive; /* Police personnalisée */
+  text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black; /* Contours noirs */
+}
+
+/* Styles pour les boutons */
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.button-container-char {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Style pour les boutons personnalisés */
+.custom-button {
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #000; /* Couleur du texte en noir */
+  background-color: #ffffff; /* Couleur de fond en noir */
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgba(0, 0, 0, 0.333);
+  border-radius: 40px;
+  padding: 16px 28px 16px 24px;
+  transform: translate(0px, 0px) rotate(0deg);
+  transition: 0.2s;
+  box-shadow: -4px -2px 16px 0px #000000, 4px 2px 16px 0px rgba(0, 0, 0, 0.48);
+  text-decoration: none; /* Supprime le soulignement par défaut des liens */
+}
+
+.custom-button:hover {
+  color: #bd8630;
+  background-color: #E5EDF5;
+  box-shadow: -2px -1px 8px 0px #000000, 2px 1px 8px 0px rgba(0, 0, 0, 0.48);
+}
+
+.custom-button:active {
+  box-shadow: none;
+}
+
+
+/* Styles pour le footer */
+footer {
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Styles spécifiques à l'en-tête */
+.main-header {
+  background: rgba(0, 0, 0, 0.4); /* Fond semi-transparent */
+  color: white;
+  padding: 10px 0;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo img {
+  height: 60px; /* Ajustez selon la taille de votre logo */
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav li {
+  padding: 0 15px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: white;
+}
+
+/* Vous pouvez supprimer le code du menu déroulant car il n'est plus utilisé */
+
+/* Style pour le bouton du menu déroulant (peut également être supprimé si inutilisé) */
+.dropbtn {
+  background: none;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Ajoutez de la marge à droite du lien "Se connecter" pour le séparer de "S'inscrire" */
+.main-nav a[href="/login"] {
+  margin-right: 30px; /* Ajustez la quantité de marge en fonction de vos préférences */
+}
