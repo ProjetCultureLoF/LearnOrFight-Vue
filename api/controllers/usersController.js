@@ -15,7 +15,7 @@ async function getByToken(req, res){
 
 async function getAll(req, res){
     try{
-        const { ID_User, Name_User, Mail_User, Password_User, Token_User, ID_Clan } = req.query;
+        const { ID_User, Name_User, Mail_User, Password_User, Token_User, isAdmin, ClanId } = req.query;
         const where = { };
         if(ID_User){
             where.ID_User = ID_User
@@ -32,8 +32,11 @@ async function getAll(req, res){
         if(Token_User){
             where.Token_User = Token_User
         }
-        if(ID_Clan){
-            where.ID_Clan = ID_Clan
+        if(isAdmin){
+            where.isAdmin = isAdmin
+        }
+        if(ClanId){
+            where.ClanId = ClanId
         }
         const users = await User.findAll({ where });
 
@@ -46,9 +49,10 @@ async function getAll(req, res){
 
 async function createUser(req, res){
     try{
-        const { name, mail, password, token, clanId } = req.params;
+        const { name, mail, password, token, isAdmin, clanId } = req.params;
 
-        const user = await User.create({ Name_User: name, Mail_User: mail, Password_User: password, Token_User: token, ID_Clan: clanId });
+        console.log("REGARDE ICI:", req.params)
+        const user = await User.create({ Name_User: name, Mail_User: mail, Password_User: password, Token_User: token, isAdmin: isAdmin, ClanId: parseInt(clanId) });
 
         res.status(200).json(user);
     }catch(error){
@@ -61,7 +65,7 @@ async function patchUser(req, res){
     try{
         const { id } = req.params;
 
-        const { Name_User, Mail_User, Password_User, Token_User, ID_Clan } = req.query;
+        const { Name_User, Mail_User, Password_User, Token_User, isAdmin, ClanId } = req.query;
         const criteria = { };
 
         if(Name_User){
@@ -76,8 +80,11 @@ async function patchUser(req, res){
         if(Token_User){
             criteria.Token_User = Token_User
         }
-        if(ID_Clan){
-            criteria.ID_Clan = ID_Clan
+        if(isAdmin){
+            where.isAdmin = isAdmin
+        }
+        if(ClanId){
+            criteria.ClanId = ClanId
         }
 
         const user = await User.update(criteria, { where: {ID_User: id} });
@@ -91,7 +98,7 @@ async function patchUser(req, res){
 
 async function deleteUser(req, res){
     try{
-        const { ID_User, Name_User, Mail_User, Password_User, Token_User, ID_Clan } = req.query;
+        const { ID_User, Name_User, Mail_User, Password_User, Token_User, ClanId } = req.query;
         const criteria = { };
         if(ID_User){
             criteria.ID_User = ID_User
@@ -108,8 +115,8 @@ async function deleteUser(req, res){
         if(Token_User){
             criteria.Token_User = Token_User
         }
-        if(ID_Clan){
-            criteria.ID_Clan = ID_Clan
+        if(ClanId){
+            criteria.ClanId = ClanId
         }
         const user = await User.destroy({where});
 

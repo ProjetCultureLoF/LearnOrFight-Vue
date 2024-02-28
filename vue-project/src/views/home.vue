@@ -9,13 +9,16 @@
 <script>
 import Map from "@/components/Map.vue";
 import ScoreBoard from "@/components/ScoreBoard.vue";
-import { ref, inject } from "vue";
+import { ref, inject, computed } from "vue";
 import Clans from "@/components/Clans.vue";
 
 export default {
   components: { Map, ScoreBoard, Clans },
   setup() {
-    const isLogged = inject("isLogged");
+    const isLoggedRef = inject("isLogged");
+
+    const isLogged = computed(() => isLoggedRef.value);
+
     return { isLogged };
   },
 };

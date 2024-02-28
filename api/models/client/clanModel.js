@@ -1,6 +1,5 @@
 const { db } = require("../db")
 const Sequelize = require('sequelize');
-const { User } = require('./userModel');
 
 const Clan = db.define("clan", {
     ID_Clan: {
@@ -13,7 +12,5 @@ const Clan = db.define("clan", {
     }
 });
 
-User.belongsTo(Clan, {foreignKey: "ID_User"})
-Clan.hasMany(User, {foreignKey: "ID_Clan"})
 
-module.exports = {db, Clan, User};
+module.exports = {db, Clan};

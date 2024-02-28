@@ -135,6 +135,7 @@ export default {
             if (response.data) {
               accountName.value = response.data[0]["Name_User"];
               isConnected.value = true;
+              emit("isConnectedChange", isConnected.value);
             }
           })
           .catch((error) => {
@@ -142,7 +143,6 @@ export default {
             isConnected.value = false; // Ajustement pour isConnected
           });
       }
-      emit("isConnectedChange", isConnected.value);
     };
 
     const close = () => {
@@ -167,13 +167,14 @@ export default {
 
       api
         .post(
-          `/users/${username.value}/${mail.value}/${hashedPassword}/${tokenValue}/1`
+          `/users/${username.value}/${mail.value}/${hashedPassword}/${tokenValue}/1/1`
         )
         .then(() => {
           Cookies.set("token", tokenValue, { expires: 7 });
           accountName.value = username.value;
           isConnected.value = true; // Ajustement pour isConnected
           close();
+          emit("isConnectedChange", isConnected.value);
         })
         .catch((error) => {
           console.error(error);
