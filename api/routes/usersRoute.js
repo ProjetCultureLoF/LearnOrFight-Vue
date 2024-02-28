@@ -9,4 +9,8 @@ usersRouter.post('/:name/:mail/:password/:token/:clanId', controller.createUser)
 usersRouter.get('/', controller.getAll)
 usersRouter.get('/byToken', controller.getByToken)
 
+usersRouter.patch('/:id', controller.patchUser);
+
+usersRouter.delete('/', controller.deleteUser);
+
 module.exports = usersRouter

@@ -1,7 +1,7 @@
 <template>
     <footer class="footer">
         <div class="container">
-            <p>© 2024 Tous droits réservés. Slay The Baraka.</p>
+            <p>© 2024 Tous droits réservés. Learn or Fight.</p>
         </div>
     </Footer>
 </template>
@@ -25,12 +25,5 @@ footer {
     background: rgba(0, 0, 0, 0.4);
 }
 
-footer p {
-    font-family: 'Press Start 2P', cursive;
-    /* Police personnalisée */
-    text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black; /* Contours noirs */
-    letter-spacing: -2px;
-    font-size: 14px;
-}
 
 </style>

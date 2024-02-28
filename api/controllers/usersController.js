@@ -57,4 +57,67 @@ async function createUser(req, res){
     }
 };
 
-module.exports = { getByToken, getAll, createUser };
+async function patchUser(req, res){
+    try{
+        const { id } = req.params;
+
+        const { Name_User, Mail_User, Password_User, Token_User, ID_Clan } = req.query;
+        const criteria = { };
+
+        if(Name_User){
+            criteria.Name_User = Name_User
+        }
+        if(Mail_User){
+            criteria.Mail_User = Mail_User
+        }
+        if(Password_User){
+            criteria.Password_User = Password_User
+        }
+        if(Token_User){
+            criteria.Token_User = Token_User
+        }
+        if(ID_Clan){
+            criteria.ID_Clan = ID_Clan
+        }
+
+        const user = await User.update(criteria, { where: {ID_User: id} });
+
+        res.status(200).json(user);
+    }catch(error){
+        console.log(error);
+        res.status(400).json(error);
+    }
+};
+
+async function deleteUser(req, res){
+    try{
+        const { ID_User, Name_User, Mail_User, Password_User, Token_User, ID_Clan } = req.query;
+        const criteria = { };
+        if(ID_User){
+            criteria.ID_User = ID_User
+        }
+        if(Name_User){
+            criteria.Name_User = Name_User
+        }
+        if(Mail_User){
+            criteria.Mail_User = Mail_User
+        }
+        if(Password_User){
+            criteria.Password_User = Password_User
+        }
+        if(Token_User){
+            criteria.Token_User = Token_User
+        }
+        if(ID_Clan){
+            criteria.ID_Clan = ID_Clan
+        }
+        const user = await User.destroy({where});
+
+        res.status(200).json(user);
+    }catch(error){
+        console.log(error);
+        res.status(400).json(error);
+    }
+};
+
+module.exports = { getByToken, getAll, createUser, patchUser, deleteUser };
