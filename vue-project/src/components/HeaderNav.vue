@@ -9,7 +9,7 @@
       /></router-link>
     </div>
     <nav class="main-nav">
-      <ul v-if="notConnected">
+      <ul v-if="!isConnected">
         <a href="#" @click="showLogin = true">Se connecter</a>
         <a href="#" @click="showRegister = true">S'inscrire</a>
       </ul>
@@ -55,7 +55,6 @@
             <label for="password">Mot de passe:</label>
             <input id="password" v-model="password" type="password" required />
           </div>
-          <!-- Ajout du message d'erreur ici -->
           <div v-if="loginError" class="error-message">{{ loginError }}</div>
           <button class="custom-button" @click="registerUser" type="submit">
             Se connecter
@@ -106,123 +105,142 @@
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { api } from "@/plugins/requete.js";
 import Overlay from "@/components/Overlay.vue";
+
 export default {
   components: { Overlay },
-  data() {
-    return {
-      notConnected: true,
-      showLogin: false,
-      showRegister: false,
-      username: "",
-      password: "",
-      mail: "",
-      token: Cookies.get("token") || null,
-      accountName: "",
-      player: null,
-      dropdownVisible: false,
-      loginError: "",
-      registerError: "",
+  emits: ["isConnectedChange"],
+  setup(props, { emit }) {
+    const isConnected = ref(false);
+    const showLogin = ref(false);
+    const showRegister = ref(false);
+    const username = ref("");
+    const password = ref("");
+    const mail = ref("");
+    const token = ref(Cookies.get("token") || null);
+    const accountName = ref("");
+    const dropdownVisible = ref(false);
+    const loginError = ref("");
+    const registerError = ref("");
+
+    const isLogged = async () => {
+      if (token.value != null) {
+        await api
+          .get(`/users/?Token_User=${token.value}`)
+          .then((response) => {
+            if (response.data) {
+              accountName.value = response.data[0]["Name_User"];
+              isConnected.value = true;
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            isConnected.value = false; // Ajustement pour isConnected
+          });
+      }
+      emit("isConnectedChange", isConnected.value);
     };
-  },
-  mounted() {
-    this.isLogged();
-  },
-  methods: {
-    register() {
-      this.token = CryptoJS.lib.WordArray.random(128 / 8).toString();
+
+    const close = () => {
+      showLogin.value = false;
+      showRegister.value = false;
+    };
+
+    const logout = () => {
+      Cookies.remove("token");
+      isConnected.value = false; // Inverser la logique pour isConnected
+      dropdownVisible.value = false;
+      location.reload();
+    };
+
+    const register = () => {
+      const tokenValue = CryptoJS.lib.WordArray.random(128 / 8).toString();
       const salt = "your-salt-string";
-      const hashedPassword = CryptoJS.PBKDF2(this.password, salt, {
+      const hashedPassword = CryptoJS.PBKDF2(password.value, salt, {
         keySize: 512 / 32,
         iterations: 1000,
       }).toString();
 
       api
         .post(
-          `/users/${this.username}/${this.mail}/${hashedPassword}/${this.token}/1`
+          `/users/${username.value}/${mail.value}/${hashedPassword}/${tokenValue}/1`
         )
-        .then((response) => {
-          // Inscription réussie, procédez à la connexion automatique ici
-          Cookies.set("token", this.token, { expires: 7 });
-          this.accountName = this.username;
-          this.notConnected = false;
-          this.close();
-          location.reload();
+        .then(() => {
+          Cookies.set("token", tokenValue, { expires: 7 });
+          accountName.value = username.value;
+          isConnected.value = true; // Ajustement pour isConnected
+          close();
         })
         .catch((error) => {
           console.error(error);
-          this.registerError =
+          registerError.value =
             "Peut-être que le nom d'utilisateur ou l'email est déjà utilisé.";
         });
-    },
+    };
 
-    registerUser() {
+    const registerUser = () => {
       const salt = "your-salt-string";
-      const hashedPassword = CryptoJS.PBKDF2(this.password, salt, {
+      const hashedPassword = CryptoJS.PBKDF2(password.value, salt, {
         keySize: 512 / 32,
         iterations: 1000,
       }).toString();
+
       api
         .get(
-          `/users/?Name_User=${this.username}&Password_User=${hashedPassword}`
+          `/users/?Name_User=${username.value}&Password_User=${hashedPassword}`
         )
         .then((response) => {
           if (response.data != null) {
             const player = response.data[0];
-            console.log(player);
-            this.token = CryptoJS.lib.WordArray.random(128 / 8);
+            const tokenValue = CryptoJS.lib.WordArray.random(
+              128 / 8
+            ).toString();
             api
-              .patch(`/users/${player.ID_User}?Token_User=${this.token}`)
-              .then((response) => {
-                Cookies.set("token", this.token, { expires: "" });
-                this.isLogged();
-                this.notConnected = false;
-                this.close();
-                location.reload();
+              .patch(`/users/${player.ID_User}?Token_User=${tokenValue}`)
+              .then(() => {
+                Cookies.set("token", tokenValue, { expires: "" });
+                isConnected.value = true; // Ajustement pour isConnected
+                close();
               })
               .catch((error) => console.log(error));
           } else {
-            this.loginError = "Nom d'utilisateur ou mot de passe incorrect.";
+            loginError.value = "Nom d'utilisateur ou mot de passe incorrect.";
           }
         })
         .catch((error) => {
           console.error(error);
-          this.loginError =
+          loginError.value =
             "Erreur lors de la tentative de connexion. Veuillez réessayer.";
         });
-    },
-    logout() {
-      Cookies.remove("token");
-      this.notConnected = true;
-      this.dropdownVisible = false;
-      location.reload();
-    },
-    async isLogged() {
-      if (this.token != null) {
-        await api
-          .get(`/users/?Token_User=${this.token}`)
-          .then((response) => {
-            if (response.data) {
-              this.accountName = response.data[0]["Name_User"];
-              this.notConnected = false;
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            // Handle login failure (e.g., show an error message)
-          });
-      }
-    },
-    toggleDropdown() {
-      this.dropdownVisible = !this.dropdownVisible;
-    },
-    close() {
-      this.showLogin = false;
-      this.showRegister = false;
-    },
+    };
+
+    onMounted(() => {
+      isLogged();
+    });
+
+    // Include the methods here using the same logic but referencing the ref values directly.
+
+    return {
+      isConnected,
+      showLogin,
+      showRegister,
+      username,
+      password,
+      mail,
+      token,
+      accountName,
+      dropdownVisible,
+      loginError,
+      registerError,
+      register,
+      registerUser,
+      logout,
+      close,
+    };
   },
 };
 </script>

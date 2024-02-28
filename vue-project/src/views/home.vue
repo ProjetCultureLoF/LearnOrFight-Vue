@@ -1,16 +1,23 @@
 <template>
   <div id="home">
-    <Map />
+    <Map v-if="isLogged" />
     <ScoreBoard />
+    <Clans />
   </div>
 </template>
 
 <script>
 import Map from "@/components/Map.vue";
 import ScoreBoard from "@/components/ScoreBoard.vue";
+import { ref, inject } from "vue";
+import Clans from "@/components/Clans.vue";
 
 export default {
-  components: { Map, ScoreBoard },
+  components: { Map, ScoreBoard, Clans },
+  setup() {
+    const isLogged = inject("isLogged");
+    return { isLogged };
+  },
 };
 </script>
 

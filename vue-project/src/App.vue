@@ -1,14 +1,28 @@
 <template>
-  <HeaderNav />
+  <HeaderNav @isConnectedChange="sendIsLogged" />
   <router-view />
 </template>
 
-<script lang="js">
-import HeaderNav from './components/HeaderNav.vue';
+<script>
+import { ref, provide } from "vue";
+import HeaderNav from "./components/HeaderNav.vue";
+
 export default {
-  name: 'App',
-  components:{HeaderNav}
-}
+  name: "App",
+  components: { HeaderNav },
+  setup() {
+    const isLogged = ref(false);
+    const sendIsLogged = (newIsLogged) => {
+      isLogged.value = newIsLogged;
+    };
+    provide("isLogged", isLogged);
+
+    return {
+      isLogged,
+      sendIsLogged,
+    };
+  },
+};
 </script>
 
 <style></style>
