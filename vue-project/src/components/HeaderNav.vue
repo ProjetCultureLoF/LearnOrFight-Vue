@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <div class="logo">
-      <router-link to="/map"
+      <router-link to="/"
         ><img
           src="/src/assets/logo/lof-logo.png"
           alt="Logo"

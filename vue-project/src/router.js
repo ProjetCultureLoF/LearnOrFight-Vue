@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/home.vue';
 import Departments from '@/views/Departments.vue';
+import NotFound from '@/views/pageNotFound.vue';
 
 // import Account from './views/Account.vue';
-import Map from './views/map.vue';
 // import Leaderboard from './components/Leaderboard.vue';
 
 export default createRouter({
@@ -14,11 +14,7 @@ export default createRouter({
       name: 'home',
       component: Home,
     },
-    {
-      path: '/map',
-      name: "map",
-      component: Map,
-    },
+
     {
       path: '/departments/:dep',
       name: "departments",
@@ -32,5 +28,9 @@ export default createRouter({
     //   path: '/leaderboard',
     //   component: Leaderboard
     // }
+    {
+      path:"/:catchall(.*)*",
+      component: NotFound
+    },
   ]
 })
