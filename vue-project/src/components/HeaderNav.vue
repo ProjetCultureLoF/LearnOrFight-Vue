@@ -34,7 +34,9 @@
               >
             </li>
             <li>
-              <a href="#" @click="logout" class="dropdown-text">Déconnexion</a>
+              <router-link to="/" @click="logout" class="dropdown-text"
+                >Déconnexion</router-link
+              >
             </li>
           </ul>
         </li>
