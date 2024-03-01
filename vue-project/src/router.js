@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/home.vue';
 import Departments from '@/views/Departments.vue';
 import NotFound from '@/views/pageNotFound.vue';
+import Admin from '@/views/AdminQuizz.vue';
 
 // import Account from './views/Account.vue';
 // import Leaderboard from './components/Leaderboard.vue';
@@ -19,6 +20,11 @@ export default createRouter({
       path: '/departments/:dep',
       name: "departments",
       component: Departments
+    },
+    {
+      path: '/admin',
+      name: "admin",
+      component: Admin
     },
     // {
     //   path: '/account',

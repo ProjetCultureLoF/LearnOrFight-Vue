@@ -3,8 +3,8 @@ const express = require('express');
 const departmentsRouter = express.Router();
 const controller = require('../controllers/departmentsController')
 
-departmentsRouter.post('/:name', controller.createDepartment);
-departmentsRouter.post('/theme/:id/:themeId', controller.departmentAddTheme);
+departmentsRouter.post('/:name/:code', controller.createDepartment);
+departmentsRouter.post('/theme/:code/:title', controller.departmentAddTheme);
 
 departmentsRouter.get('/', controller.getAll);
 departmentsRouter.get('/byId/:id', controller.getById);

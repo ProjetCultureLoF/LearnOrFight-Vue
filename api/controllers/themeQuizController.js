@@ -59,10 +59,12 @@ async function getById(req, res){
 
 async function createThemeQuiz(req, res){
     try{
-        const { quizId, themeId } = req.params;
+        const { quizId, title } = req.params;
+
+        const theme = await Theme.findOne({where: {Title_Theme: title}})
 
         const themeQuiz = await ThemeQuiz.create({ 
-            quizIDQuiz: quizId, themeIDTheme: themeId
+            quizIDQuiz: quizId, themeIDTheme: theme.ID_Theme
         });
 
         res.status(200).json(themeQuiz);

@@ -21,13 +21,16 @@ async function getById(req, res){
 
 async function getAll(req, res){
     try{
-        const { ID_Department, Name_Department } = req.query;
+        const { ID_Department, Name_Department, Code_Department } = req.query;
         const where = { };
         if(ID_Department){
             where.ID_Department = ID_Department
         }
         if(Name_Department){
             where.Name_Department = Name_Department
+        }
+        if(Code_Department){
+            where.Code_Department = Code_Department
         }
         const departments = await Department.findAll( {
             include: [{
@@ -44,19 +47,20 @@ async function getAll(req, res){
 
 async function departmentAddTheme(req, res){
     try{
-        const { id, themeId } = req.params;
+        const { code, title } = req.params;
        
         const department = await Department.findOne({ 
-            where: {ID_Department: id } 
+            where: {Code_Department: code } 
         });
         const theme = await Theme.findOne({ 
-                where: {ID_Theme: themeId } 
+                where: {Title_Theme: title } 
         });
-
+        
+        await department.setThemes([]); 
         await department.addTheme(theme);
 
         const departmentTheme = await Department.findOne({ 
-            where: {ID_Department: id } 
+            where: {Code_Department: code } 
         });
 
         res.status(200).json(departmentTheme);
@@ -68,10 +72,10 @@ async function departmentAddTheme(req, res){
 
 async function createDepartment(req, res){
     try{
-        const { name } = req.params;
+        const { name, code } = req.params;
 
         const department = await Department.create({ 
-            Name_Department: name
+            Name_Department: name, Code_Department: code
         });
 
         res.status(200).json(department);
@@ -83,11 +87,14 @@ async function createDepartment(req, res){
 
 async function patchDepartment(req, res){
     try{
-        const { Name_Department } = req.query;
+        const { Name_Department, Code_Department } = req.query;
         const criteria = { };
         const { id } = req.params
         if(Name_Department){
             criteria.Name_Department = Name_Department
+        }
+        if(Code_Department){
+            where.Code_Department = Code_Department
         }
         const department = await Department.update(criteria, { where: { ID_Department: id } });
 
@@ -112,13 +119,16 @@ async function deleteDepartment(req, res){
 
 async function deleteDepartmentQuery(req, res){
     try{
-        const { ID_Department, Name_Department } = req.query;
+        const { ID_Department, Name_Department, Code_Department } = req.query;
         const where = { };
         if(ID_Department){
             where.ID_Department = ID_Department
         }
         if(Name_Department){
             where.Name_Department = Name_Department
+        }
+        if(Code_Department){
+            where.Code_Department = Code_Department
         }
         const Department = await Department.destroy({ where });
 

@@ -4,7 +4,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-
+import { api } from "@/plugins/requete";
 const dataFrance = ref("");
 async function loadData() {
   try {
@@ -137,6 +137,7 @@ function themeAleatoire() {
     "Divertissement",
     "Films-et-series",
   ];
+
   let index = Math.floor(Math.random() * themes.length);
   return themes[index];
 }
@@ -145,10 +146,10 @@ onMounted(async () => {
   await loadData();
 
   for (let code of codeDepartements.value) {
-    departements.value.set(code, themeAleatoire());
+    let theme = themeAleatoire();
+    departements.value.set(code, theme);
+    api.post(`/departments/theme/${code}/${theme}`);
   }
-  console.log(departements.value);
-  console.log(dataFrance.value);
 
   const svg = d3
     .select("#map")
@@ -182,7 +183,6 @@ onMounted(async () => {
       stats.set(theme, 1);
     }
   }
-  console.log(stats);
 });
 </script>
 

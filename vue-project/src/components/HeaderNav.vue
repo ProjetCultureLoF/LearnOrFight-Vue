@@ -7,6 +7,7 @@
           alt="Logo"
           style="height: 70px"
       /></router-link>
+      <router-link to="/admin" v-if="isAdmin">Créer quizz</router-link>
     </div>
     <nav class="main-nav">
       <ul v-if="!isConnected">
@@ -56,7 +57,7 @@
             <input id="password" v-model="password" type="password" required />
           </div>
           <div v-if="loginError" class="error-message">{{ loginError }}</div>
-          <button class="custom-button" @click="registerUser" type="submit">
+          <button class="custom-button" @click="logginUser" type="submit">
             Se connecter
           </button>
         </form>
@@ -105,7 +106,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { api } from "@/plugins/requete.js";
@@ -118,6 +119,8 @@ export default {
     const isConnected = ref(false);
     const showLogin = ref(false);
     const showRegister = ref(false);
+    const isAdmin = ref(false);
+
     const username = ref("");
     const password = ref("");
     const mail = ref("");
@@ -127,6 +130,10 @@ export default {
     const loginError = ref("");
     const registerError = ref("");
 
+    const isConnectedComp = computed(() => {
+      return isConnected.value;
+    });
+
     const isLogged = async () => {
       if (token.value != null) {
         await api
@@ -135,7 +142,8 @@ export default {
             if (response.data) {
               accountName.value = response.data[0]["Name_User"];
               isConnected.value = true;
-              emit("isConnectedChange", isConnected.value);
+              console.log(isAdmin.value);
+              isAdmin.value = response.data[0]["isAdmin"];
             }
           })
           .catch((error) => {
@@ -143,6 +151,13 @@ export default {
             isConnected.value = false; // Ajustement pour isConnected
           });
       }
+      console.log(
+        "Valeur isConnectedComp: ",
+        isConnectedComp.value,
+        "isConnected: ",
+        isConnected.value
+      );
+      emit("isConnectedChange", isConnectedComp.value);
     };
 
     const close = () => {
@@ -154,7 +169,8 @@ export default {
       Cookies.remove("token");
       isConnected.value = false; // Inverser la logique pour isConnected
       dropdownVisible.value = false;
-      location.reload();
+      isAdmin.value = false;
+      emit("isConnectedChange", isConnectedComp.value);
     };
 
     const register = () => {
@@ -183,7 +199,7 @@ export default {
         });
     };
 
-    const registerUser = () => {
+    const logginUser = () => {
       const salt = "your-salt-string";
       const hashedPassword = CryptoJS.PBKDF2(password.value, salt, {
         keySize: 512 / 32,
@@ -206,6 +222,8 @@ export default {
                 Cookies.set("token", tokenValue, { expires: "" });
                 isConnected.value = true; // Ajustement pour isConnected
                 close();
+                isAdmin.value = response.data[0]["isAdmin"];
+                emit("isConnectedChange", isConnectedComp.value);
               })
               .catch((error) => console.log(error));
           } else {
@@ -226,6 +244,7 @@ export default {
     // Include the methods here using the same logic but referencing the ref values directly.
 
     return {
+      isAdmin,
       isConnected,
       showLogin,
       showRegister,
@@ -238,7 +257,7 @@ export default {
       loginError,
       registerError,
       register,
-      registerUser,
+      logginUser,
       logout,
       close,
     };

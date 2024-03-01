@@ -9,7 +9,11 @@ const Department = db.define("department", {
     },
     Name_Department: {
         type: Sequelize.STRING,
-    }
+    },
+    Code_Department: {
+        type: Sequelize.STRING,
+        unique: true
+    },
 });
 
 module.exports = {db, Department};

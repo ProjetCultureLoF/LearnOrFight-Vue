@@ -4,7 +4,7 @@ const themeQuizRouter = express.Router();
 
 const controller = require('../controllers/themeQuizController');
 
-themeQuizRouter.post('/:quizId/:themeId', controller.createThemeQuiz);
+themeQuizRouter.post('/:quizId/:title', controller.createThemeQuiz);
 
 themeQuizRouter.get('/', controller.getAll);
 themeQuizRouter.get('/:id', controller.getById);
