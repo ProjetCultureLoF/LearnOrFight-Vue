@@ -144,7 +144,6 @@ export default {
             if (response.data) {
               accountName.value = response.data[0]["Name_User"];
               isConnected.value = true;
-              console.log(isAdmin.value);
               isAdmin.value = response.data[0]["isAdmin"];
             }
           })
@@ -222,7 +221,8 @@ export default {
               .patch(`/users/${player.ID_User}?Token_User=${tokenValue}`)
               .then(() => {
                 Cookies.set("token", tokenValue, { expires: "" });
-                isConnected.value = true; // Ajustement pour isConnected
+                isConnected.value = true;
+                accountName.value = response.data[0]["Name_User"];
                 close();
                 isAdmin.value = response.data[0]["isAdmin"];
                 emit("isConnectedChange", isConnectedComp.value);

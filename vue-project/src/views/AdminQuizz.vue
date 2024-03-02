@@ -1,6 +1,6 @@
 User
 <template>
-  <Quiz v-for="(quiz, index) in quizes" :key="index" :quiz="quiz">
+  <Quiz v-for="(quiz, index) in quizes" :key="index" :quiz="quiz" :admin="true">
     <button @click="deleteQuiz(quiz.ID_Quiz)">Supprimer</button>
   </Quiz>
   <div id="quiz">
@@ -61,7 +61,7 @@ const a1 = ref("");
 const a2 = ref("");
 const a3 = ref("");
 const a4 = ref("");
-const goodAnswer = ref(null);
+const goodAnswer = ref(0);
 const themes = ref(null);
 const themesValue = ref("");
 
@@ -101,35 +101,24 @@ async function deleteQuiz(quizId) {
 }
 
 async function createQuiz() {
-  let isGoodAnswer = null;
+  let isGoodAnswer = 0;
   try {
-    await api.post(`/quiz/${quizName.value}`).then((quizData) => {
-      for (const question of questions.value) {
-        console.log(question);
-        api.post(`/answers/${question.value}`).then((answerData) => {
-          console.log(answerData.data);
-          if (questions.value[goodAnswer.value] == question) {
-            isGoodAnswer = 1;
-          } else {
-            isGoodAnswer = 0;
-          }
-          console.log(isGoodAnswer);
-          api
-            .post(
+    await api
+      .post(`/quiz/${quizName.value}`)
+      .then((quizData) => {
+        for (const question of questions.value) {
+          api.post(`/answers/${question.value}`).then((answerData) => {
+            if (questions.value[goodAnswer.value] == question) {
+              isGoodAnswer = 1;
+            }
+            api.post(
               `/quizAnswers/${quizData.data.ID_Quiz}/${answerData.data.ID_Answer}/${isGoodAnswer}`
-            )
-            .then((response) => {
-              console.log(response.data);
-            });
-        });
-      }
-      api
-        .post(`/themeQuiz/${quizData.data.ID_Quiz}/${themesValue.value}`)
-        .then((response) => {
-          console.log(response.data);
-        });
-    });
-    await getQuizes();
+            );
+          });
+        }
+        api.post(`/themeQuiz/${quizData.data.ID_Quiz}/${themesValue.value}`);
+      })
+      .finally(await getQuizes());
   } catch (error) {
     console.log(error);
   }

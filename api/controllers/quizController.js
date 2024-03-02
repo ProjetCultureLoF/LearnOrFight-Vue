@@ -19,7 +19,7 @@ async function getAll(req, res){
             },
             {
                 model: Theme,
-
+                
             }
             ] 
          });
@@ -43,7 +43,6 @@ async function getById(req, res){
                 },
                 {
                     model: Theme,
-                    attributes: ["Title_Theme"]
                 }
                 ]
             }

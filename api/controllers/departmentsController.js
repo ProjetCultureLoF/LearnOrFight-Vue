@@ -19,7 +19,7 @@ async function getById(req, res){
     }
 };
 
-async function getAll(req, res){
+async function getDepartmentsQuizes(req, res){
     try{
         const { ID_Department, Name_Department, Code_Department } = req.query;
         const where = { };
@@ -33,6 +33,32 @@ async function getAll(req, res){
             where.Code_Department = Code_Department
         }
         const departments = await Department.findAll( {
+            include: [{
+                model: Theme,
+                through: { attributes: [] } 
+            }]
+        });
+        res.status(200).json(departments);
+    }catch(error){
+        console.log(error);
+        res.status(400).json(error);
+    }
+};
+
+async function getAll(req, res){
+    try{
+        const { ID_Department, Name_Department, Code_Department } = req.query;
+        const where = { };
+        if(ID_Department){
+            where.ID_Department = ID_Department
+        }
+        if(Name_Department){
+            where.Name_Department = Name_Department
+        }
+        if(Code_Department){
+            where.Code_Department = Code_Department
+        }
+        const departments = await Department.findAll( { where,
             include: [{
                 model: Theme,
                 through: { attributes: [] } 

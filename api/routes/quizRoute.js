@@ -7,7 +7,7 @@ const controller = require('../controllers/quizController');
 quizRouter.post('/:question', controller.createQuiz);
 
 quizRouter.get('/', controller.getAll);
-quizRouter.get('/:id', controller.getById);
+quizRouter.get('/byId/:id', controller.getById);
 
 quizRouter.patch('/:id', controller.patchQuiz);
 
