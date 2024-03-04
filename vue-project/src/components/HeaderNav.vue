@@ -113,7 +113,7 @@ import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { api } from "@/plugins/requete.js";
 import Overlay from "@/components/Overlay.vue";
-
+import router from "@/router";
 export default {
   components: { Overlay },
   emits: ["isConnectedChange"],
@@ -141,23 +141,22 @@ export default {
         await api
           .get(`/users/?Token_User=${token.value}`)
           .then((response) => {
-            if (response.data) {
+            if (response.data.length > 0) {
+              console.log("Connexion");
               accountName.value = response.data[0]["Name_User"];
               isConnected.value = true;
               isAdmin.value = response.data[0]["isAdmin"];
+            } else {
+              router.push("/");
             }
           })
           .catch((error) => {
             console.error(error);
             isConnected.value = false; // Ajustement pour isConnected
           });
+      } else {
+        router.push("/");
       }
-      console.log(
-        "Valeur isConnectedComp: ",
-        isConnectedComp.value,
-        "isConnected: ",
-        isConnected.value
-      );
       emit("isConnectedChange", isConnectedComp.value);
     };
 
