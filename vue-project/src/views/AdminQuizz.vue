@@ -108,8 +108,20 @@ async function createQuiz() {
       .then((quizData) => {
         for (const question of questions.value) {
           api.post(`/answers/${question.value}`).then((answerData) => {
+            console.log(
+              "Test: ",
+              questions.value[goodAnswer.value] == question
+            );
+            console.log(
+              "Valeur goodAnswer: ",
+              goodAnswer.value,
+              "Question: ",
+              question
+            );
             if (questions.value[goodAnswer.value] == question) {
               isGoodAnswer = 1;
+            } else {
+              isGoodAnswer = 0;
             }
             api.post(
               `/quizAnswers/${quizData.data.ID_Quiz}/${answerData.data.ID_Answer}/${isGoodAnswer}`
