@@ -5,13 +5,14 @@
     <h2>{{ badAnswer }}</h2>
   </div>
   <div v-else-if="quizes.length > 0">
-    <Quiz :quiz="quizes[currentQuiz]" @nextQuestion="nextQuestion" />
+    <Quiz :quiz="quizes[currentQuiz]" @nextQuestion="waitNextQuestion" />
   </div>
+  <button v-if="waitNext" @click="nextQuestion">Prochaine question</button>
 </template>
 
 <script setup>
 import Quiz from "@/components/Quiz.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, provide } from "vue";
 import { api } from "@/plugins/requete";
 import { useRoute } from "vue-router";
 
@@ -24,43 +25,45 @@ const goodAnswer = ref(0);
 const badAnswer = ref(0);
 const isFinished = ref(false);
 
+const waitNext = ref(false);
+
+provide("wait", waitNext);
+
 async function getQuizes() {
   const departments = await api.get(
     `/departments/?Name_Department=${route.params.dep}`
   );
-  console.log(departments.data);
+  //console.log(departments.data);
   const themeQuizes = await api.get(
     `/themeQuiz/?themeIDTheme=${departments.data[0].themes[0].ID_Theme}`
   );
-  console.log(themeQuizes.data);
+  //console.log(themeQuizes.data);
   for (let i = 0; i < themeQuizes.data.length; i++) {
     const quizesApi = await api.get(
       `/quiz/byId/${themeQuizes.data[i].quizIDQuiz}`
     );
     quizes.value.push(quizesApi.data);
-    console.log(quizes.value);
+    //console.log(quizes.value);
   }
 }
 
-function nextQuestion(answer) {
+function waitNextQuestion(answer) {
+  if (answer) {
+    goodAnswer.value += 1;
+  } else {
+    badAnswer.value += 1;
+  }
+
+  waitNext.value = true;
+}
+
+function nextQuestion() {
   if (currentQuiz.value < quizes.value.length) {
     currentQuiz.value++;
-    if (answer) {
-      goodAnswer.value += 1;
-    } else {
-      badAnswer.value += 1;
-    }
-    console.log("Comp:", currentQuiz.value + 1 == quizes.value.length);
-    console.log(
-      "CurrentQuizz: ",
-      currentQuiz.value,
-      "Quiz L: ",
-      quizes.value.length
-    );
-    if (currentQuiz.value == quizes.value.length) {
-      isFinished.value = true;
-    }
-    console.log(isFinished.value);
+    waitNext.value = false;
+  }
+  if (currentQuiz.value == quizes.value.length) {
+    isFinished.value = true;
   }
 }
 

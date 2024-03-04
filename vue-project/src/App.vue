@@ -30,8 +30,6 @@ export default {
         return isLogged.value;
       },
       set(newValue) {
-        console.log("newValue: ", newValue);
-
         isLogged.value = newValue;
       },
     });

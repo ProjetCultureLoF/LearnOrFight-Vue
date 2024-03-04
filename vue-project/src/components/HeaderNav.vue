@@ -142,7 +142,6 @@ export default {
           .get(`/users/?Token_User=${token.value}`)
           .then((response) => {
             if (response.data.length > 0) {
-              console.log("Connexion");
               accountName.value = response.data[0]["Name_User"];
               isConnected.value = true;
               isAdmin.value = response.data[0]["isAdmin"];
@@ -152,7 +151,7 @@ export default {
           })
           .catch((error) => {
             console.error(error);
-            isConnected.value = false; // Ajustement pour isConnected
+            isConnected.value = false;
           });
       } else {
         router.push("/");
@@ -167,7 +166,7 @@ export default {
 
     const logout = () => {
       Cookies.remove("token");
-      isConnected.value = false; // Inverser la logique pour isConnected
+      isConnected.value = false;
       dropdownVisible.value = false;
       isAdmin.value = false;
       emit("isConnectedChange", isConnectedComp.value);
@@ -188,7 +187,7 @@ export default {
         .then(() => {
           Cookies.set("token", tokenValue, { expires: 7 });
           accountName.value = username.value;
-          isConnected.value = true; // Ajustement pour isConnected
+          isConnected.value = true;
           close();
           emit("isConnectedChange", isConnected.value);
         })
@@ -241,8 +240,6 @@ export default {
     onMounted(() => {
       isLogged();
     });
-
-    // Include the methods here using the same logic but referencing the ref values directly.
 
     return {
       isAdmin,

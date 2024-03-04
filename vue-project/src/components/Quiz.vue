@@ -13,7 +13,10 @@
     </Answers>
     <slot></slot>
   </div>
-  <button v-if="admin == false" @click="isAnswer(selectedAnswer)">
+  <button
+    v-if="admin == false || waitNext == false"
+    @click="isAnswer(selectedAnswer)"
+  >
     Valider
   </button>
   <p v-if="errorMessages != ''">{{ errorMessages }}</p>
@@ -22,7 +25,7 @@
 <script setup>
 import Answers from "./Answers.vue";
 import { api } from "@/plugins/requete";
-import { provide, ref, watch } from "vue";
+import { inject, provide, ref, watch } from "vue";
 
 const emit = defineEmits(["nextQuestion"]);
 
@@ -36,6 +39,7 @@ const props = defineProps({
 
 const selectedAnswer = ref(null);
 provide("changeColor", selectedAnswer);
+const waitNext = inject("wait");
 const errorMessages = ref("");
 const time = ref(30);
 
@@ -58,16 +62,25 @@ async function isAnswer(answer) {
 watch(
   () => time.value,
   (count) => {
-    if (count > 0) {
+    console.log(waitNext.value);
+    if (count > 0 && waitNext.value == false) {
       setTimeout(() => {
         time.value--;
       }, 1000);
     }
     if (count == 0) {
       emit("nextQuestion", false);
-      time.value = 30;
     }
   },
   { immediate: true }
+);
+
+watch(
+  () => waitNext.value,
+  (newWaitNext) => {
+    if (newWaitNext == false) {
+      time.value = 30;
+    }
+  }
 );
 </script>
