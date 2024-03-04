@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { inject } from "vue";
 
 const props = defineProps({

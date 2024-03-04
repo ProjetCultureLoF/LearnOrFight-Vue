@@ -2,7 +2,9 @@
   <div id="answers">
     <h1>{{ quiz.Question_Quiz }}</h1>
     <h3>{{ quiz.themes[0].Title_Theme }}</h3>
-    <h4>{{ time }}</h4>
+    <h4 v-if="admin == false">{{ time }}</h4>
+    <slot></slot>
+
     <Answers
       v-for="(answer, index) in quiz.answers"
       :key="index"
@@ -11,15 +13,13 @@
     >
       <button v-if="admin">Modifier</button>
     </Answers>
-    <slot></slot>
   </div>
-  <button
-    v-if="admin == false || waitNext == false"
-    @click="isAnswer(selectedAnswer)"
-  >
-    Valider
-  </button>
-  <p v-if="errorMessages != ''">{{ errorMessages }}</p>
+  <div v-if="admin == false">
+    <button v-if="waitNext == false" @click="isAnswer(selectedAnswer)">
+      Valider
+    </button>
+    <p v-if="errorMessages != ''">{{ errorMessages }}</p>
+  </div>
 </template>
 
 <script setup>
@@ -35,11 +35,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  waitNext: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const selectedAnswer = ref(null);
 provide("changeColor", selectedAnswer);
-const waitNext = inject("wait");
 const errorMessages = ref("");
 const time = ref(30);
 
@@ -62,8 +65,7 @@ async function isAnswer(answer) {
 watch(
   () => time.value,
   (count) => {
-    console.log(waitNext.value);
-    if (count > 0 && waitNext.value == false) {
+    if (count > 0 && props.waitNext == false) {
       setTimeout(() => {
         time.value--;
       }, 1000);
@@ -72,11 +74,13 @@ watch(
       emit("nextQuestion", false);
     }
   },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 );
 
 watch(
-  () => waitNext.value,
+  () => props.waitNext,
   (newWaitNext) => {
     if (newWaitNext == false) {
       time.value = 30;

@@ -5,7 +5,12 @@
     <h2>{{ badAnswer }}</h2>
   </div>
   <div v-else-if="quizes.length > 0">
-    <Quiz :quiz="quizes[currentQuiz]" @nextQuestion="waitNextQuestion" />
+    <Quiz
+      :quiz="quizes[currentQuiz]"
+      @nextQuestion="waitNextQuestion"
+      :waitNext="waitNext"
+    >
+    </Quiz>
   </div>
   <button v-if="waitNext" @click="nextQuestion">Prochaine question</button>
 </template>
@@ -26,8 +31,6 @@ const badAnswer = ref(0);
 const isFinished = ref(false);
 
 const waitNext = ref(false);
-
-provide("wait", waitNext);
 
 async function getQuizes() {
   const departments = await api.get(
