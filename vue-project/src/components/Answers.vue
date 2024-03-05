@@ -1,10 +1,12 @@
 <template>
   <div
-    id="answer"
     @click="selectAnswer(answer)"
-    :class="{ active: isActive == answer ? true : false }"
+    :class="{
+      'bg-[#5487d9] hover:bg-[#3f72c4] duration-200': isActive == answer,
+    }"
+    class="w-[400px] bg-gray-200 rounded-md hover:bg-gray-300 duration-200 p-1"
   >
-    {{ answer.Text_Answer }}
+    <p class="text-2xl font-semibold">{{ answer.Text_Answer }}</p>
   </div>
   <slot></slot>
 </template>

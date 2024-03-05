@@ -1,54 +1,104 @@
-User
 <template>
-  <Quiz v-for="(quiz, index) in quizes" :key="index" :quiz="quiz" :admin="true">
-    <button @click="deleteQuiz(quiz.ID_Quiz)">Supprimer</button>
-  </Quiz>
-  <div id="quiz">
-    <input type="text" v-model="quizName" placeholder="Nom du Quiz" />
+  <div class="flex flex-col gap-10 items-center text-center">
+    <div
+      class="flex flex-col justify-center items-center place-self-center mt-24 gap-8"
+    >
+      <Quiz
+        v-for="(quiz, index) in quizes"
+        :key="index"
+        :quiz="quiz"
+        :admin="true"
+      >
+        <button
+          @click="deleteQuiz(quiz.ID_Quiz)"
+          class="bg-[#745cbccc] hover:bg-[#634ca8cc] duration-200 rounded-md p-2 w-fit"
+        >
+          Supprimer
+        </button>
+      </Quiz>
+    </div>
 
-    <input
-      type="radio"
-      name="goodAnswer"
-      :value="0"
-      v-model="goodAnswer"
-      checked
-      @click="goodAnswer = 0"
-    />
-    <input type="text" v-model="a1" placeholder="Question N°1" />
+    <div id="quiz" class="flex flex-row gap-2 text-center items-center">
+      <input
+        type="text"
+        v-model="quizName"
+        placeholder="Nom du Quiz"
+        class="bg-gray-100 rounded p-1"
+      />
 
-    <input
-      type="radio"
-      name="goodAnswer"
-      :value="1"
-      v-model="goodAnswer"
-      @click="goodAnswer = 1"
-    />
-    <input type="text" v-model="a2" placeholder="Question N°2" />
+      <input
+        type="radio"
+        name="goodAnswer"
+        :value="0"
+        v-model="goodAnswer"
+        checked
+        @click="goodAnswer = 0"
+      />
+      <input
+        type="text"
+        v-model="a1"
+        placeholder="Question N°1"
+        class="bg-gray-100 rounded p-1"
+      />
 
-    <input
-      type="radio"
-      name="goodAnswer"
-      :value="2"
-      v-model="goodAnswer"
-      @click="goodAnswer = 2"
-    />
-    <input type="text" v-model="a3" placeholder="Question N°3" />
+      <input
+        type="radio"
+        name="goodAnswer"
+        :value="1"
+        v-model="goodAnswer"
+        @click="goodAnswer = 1"
+      />
+      <input
+        type="text"
+        v-model="a2"
+        placeholder="Question N°2"
+        class="bg-gray-100 rounded p-1"
+      />
 
-    <input
-      type="radio"
-      name="goodAnswer"
-      :value="3"
-      v-model="goodAnswer"
-      @click="goodAnswer = 3"
-    />
-    <input type="text" v-model="a4" placeholder="Question N°4" />
-    <label for="type-rental">Theme:</label>
-    <select name="Theme" v-model="themesValue">
-      <option v-for="theme in themes" :key="theme.ID_Theme">
-        {{ theme.Title_Theme }}
-      </option>
-    </select>
-    <button @click="createQuiz">Créer quiz</button>
+      <input
+        type="radio"
+        name="goodAnswer"
+        :value="2"
+        v-model="goodAnswer"
+        @click="goodAnswer = 2"
+      />
+      <input
+        type="text"
+        v-model="a3"
+        placeholder="Question N°3"
+        class="bg-gray-100 rounded p-1"
+      />
+
+      <input
+        type="radio"
+        name="goodAnswer"
+        :value="3"
+        v-model="goodAnswer"
+        @click="goodAnswer = 3"
+      />
+      <input
+        type="text"
+        v-model="a4"
+        placeholder="Question N°4"
+        class="bg-gray-100 rounded p-1"
+      />
+      <label for="type-rental">Theme:</label>
+      <select
+        name="Theme"
+        v-model="themesValue"
+        class="bg-gray-100 rounded p-1"
+      >
+        <option v-for="theme in themes" :key="theme.ID_Theme">
+          {{ theme.Title_Theme }}
+        </option>
+      </select>
+      <button
+        @click="createQuiz"
+        class="bg-[#5b90b3cc] hover:bg-[#467798cc] duration-200 rounded-md p-2"
+      >
+        Créer quiz
+      </button>
+    </div>
   </div>
 </template>
 
@@ -103,34 +153,22 @@ async function deleteQuiz(quizId) {
 async function createQuiz() {
   let isGoodAnswer = 0;
   try {
-    await api
-      .post(`/quiz/${quizName.value}`)
-      .then((quizData) => {
-        for (const question of questions.value) {
-          api.post(`/answers/${question.value}`).then((answerData) => {
-            console.log(
-              "Test: ",
-              questions.value[goodAnswer.value] == question
-            );
-            console.log(
-              "Valeur goodAnswer: ",
-              goodAnswer.value,
-              "Question: ",
-              question
-            );
-            if (questions.value[goodAnswer.value] == question) {
-              isGoodAnswer = 1;
-            } else {
-              isGoodAnswer = 0;
-            }
-            api.post(
-              `/quizAnswers/${quizData.data.ID_Quiz}/${answerData.data.ID_Answer}/${isGoodAnswer}`
-            );
-          });
-        }
-        api.post(`/themeQuiz/${quizData.data.ID_Quiz}/${themesValue.value}`);
-      })
-      .finally(await getQuizes());
+    await api.post(`/quiz/${quizName.value}`).then((quizData) => {
+      api.post(`/themeQuiz/${quizData.data.ID_Quiz}/${themesValue.value}`);
+
+      for (const question of questions.value) {
+        api.post(`/answers/${question.value}`).then((answerData) => {
+          if (questions.value[goodAnswer.value] === question) {
+            isGoodAnswer = 1;
+          } else {
+            isGoodAnswer = 0;
+          }
+          api.post(
+            `/quizAnswers/${quizData.data.ID_Quiz}/${answerData.data.ID_Answer}/${isGoodAnswer}`
+          );
+        });
+      }
+    });
   } catch (error) {
     console.log(error);
   }

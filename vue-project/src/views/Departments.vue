@@ -4,20 +4,26 @@
     <h2>{{ goodAnswer }}</h2>
     <h2>{{ badAnswer }}</h2>
   </div>
-  <div v-else-if="quizes.length > 0">
+  <div
+    v-else-if="quizes.length > 0"
+    class="flex flex-col justify-center items-center place-self-center mt-24 gap-8"
+  >
     <Quiz
       :quiz="quizes[currentQuiz]"
-      @nextQuestion="waitNextQuestion"
+      @validate="waitNextQuestion"
+      @nextQuestion="nextQuestion"
       :waitNext="waitNext"
     >
     </Quiz>
   </div>
-  <button v-if="waitNext" @click="nextQuestion">Prochaine question</button>
+  <!-- <button v-if="waitNext" @click="nextQuestion" class="flex place-self-center">
+    Prochaine question
+  </button> -->
 </template>
 
 <script setup>
 import Quiz from "@/components/Quiz.vue";
-import { onMounted, ref, provide } from "vue";
+import { onMounted, ref } from "vue";
 import { api } from "@/plugins/requete";
 import { useRoute } from "vue-router";
 

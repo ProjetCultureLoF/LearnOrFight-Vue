@@ -1,40 +1,54 @@
 <template>
-  <div class="header-container">
-    <div class="logo">
-      <router-link to="/"
-        ><img
-          src="/src/assets/logo/lof-logo.png"
-          alt="Logo"
-          style="height: 70px"
-      /></router-link>
-      <router-link to="/admin" v-if="isAdmin">Créer quizz</router-link>
-    </div>
+  <div
+    class="flex flex-row justify-between items-center p-2 bg-[#5b90b3cc] shadow-md"
+  >
+    <router-link to="/" class="mt-2">
+      <img class="h-20" src="/src/assets/logo/lof-logo.png" alt="Logo" />
+    </router-link>
+    <router-link to="/admin" v-if="isAdmin" class="text-white"
+      >Créer quizz</router-link
+    >
+
     <nav class="main-nav">
-      <ul v-if="!isConnected">
-        <a href="#" @click="showLogin = true">Se connecter</a>
-        <a href="#" @click="showRegister = true">S'inscrire</a>
+      <ul v-if="!isConnected" class="flex gap-4">
+        <a href="#" @click="showLogin = true" class="text-white"
+          >Se connecter</a
+        >
+        <a href="#" @click="showRegister = true" class="text-white"
+          >S'inscrire</a
+        >
       </ul>
       <ul
         v-else
-        class="user-menu"
+        class="user-menu relative"
         @mouseover="dropdownVisible = true"
         @mouseleave="dropdownVisible = false"
       >
-        <li>
-          <a href="#">{{ accountName }}</a>
-          <ul v-if="dropdownVisible" class="dropdown-menu">
+        <li class="list-none">
+          <a href="#" class="text-white font-serif">{{ accountName }}</a>
+          <ul
+            v-if="dropdownVisible"
+            class="dropdown-menu absolute bg-[#5c2cae] min-w-max shadow-lg z-10 right-0 rounded-md top-full"
+          >
             <li>
-              <router-link to="/account" class="dropdown-text"
+              <router-link
+                to="/account"
+                class="dropdown-text rounded-md block px-4 py-3 text-red-100 hover:bg-[#481e90]"
                 >Compte</router-link
               >
             </li>
             <li>
-              <router-link to="/leaderboard" class="dropdown-text"
+              <router-link
+                to="/leaderboard"
+                class="dropdown-text block px-4 py-3 text-red-100 hover:bg-[#481e90]"
                 >Leaderboard</router-link
               >
             </li>
             <li>
-              <router-link to="/" @click="logout" class="dropdown-text"
+              <router-link
+                to="/"
+                @click="logout"
+                class="dropdown-text block px-4 py-3 rounded-md text-red-100 hover:bg-[#481e90]"
                 >Déconnexion</router-link
               >
             </li>
@@ -43,64 +57,27 @@
       </ul>
     </nav>
   </div>
-
   <transition name="fade">
-    <div class="login-popup" v-if="showLogin">
+    <div
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-200 p-10 shadow-lg rounded-lg w-1/3 min-w-max flex flex-col items-center z-50"
+      v-if="showLogin"
+    >
       <div class="login-content">
-        <button class="close-button" @click="close">X</button>
-        <h2>On s'est déjà vu?</h2>
-        <form @submit.prevent="login">
-          <div class="form-group">
-            <label for="username">Nom d'utilisateur:</label>
-            <input id="username" v-model="username" type="text" required />
-          </div>
-          <div class="form-group">
-            <label for="password">Mot de passe:</label>
-            <input id="password" v-model="password" type="password" required />
-          </div>
-          <div v-if="loginError" class="error-message">{{ loginError }}</div>
-          <button class="custom-button" @click="logginUser" type="submit">
-            Se connecter
-          </button>
-        </form>
+        <button class="close-button self-end text-2xl" @click="close">X</button>
+        <!-- Contenu de connexion -->
       </div>
     </div>
   </transition>
 
+  <!-- Inscription -->
   <transition name="fade">
-    <div class="register-popup" v-if="showRegister">
+    <div
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-10 shadow-md rounded-lg w-1/3 min-w-max flex flex-col items-center z-50"
+      v-if="showRegister"
+    >
       <div class="register-content">
-        <button class="close-button" @click="close">X</button>
-        <h2>Première visite ?</h2>
-        <form @submit.prevent="register">
-          <div class="form-group">
-            <label for="reg-username">Nom d'utilisateur:</label>
-            <input id="reg-username" v-model="username" type="text" required />
-          </div>
-          <div class="form-group">
-            <label for="reg-email">Email:</label>
-            <input
-              id="reg-email"
-              v-model="mail"
-              type="email"
-              placeholder="mail@exemple.com"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="reg-password">Mot de passe:</label>
-            <input
-              id="reg-password"
-              v-model="password"
-              type="password"
-              required
-            />
-          </div>
-          <div v-if="registerError" class="error-message">
-            {{ registerError }}
-          </div>
-          <button class="custom-button" type="submit">S'inscrire</button>
-        </form>
+        <button class="close-button self-end text-2xl" @click="close">X</button>
+        <!-- Contenu d'inscription -->
       </div>
     </div>
   </transition>
@@ -262,301 +239,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
-
-.login-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #e3e3e3;
-  padding: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  border-radius: 15px;
-  width: 30%;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: -2px -1px 8px 0px #000000, 2px 1px 8px 0px rgba(0, 0, 0, 0.48);
-}
-
-ul {
-  font-family: "Press Start 2P", cursive;
-  font-size: 13px;
-  letter-spacing: -1px;
-  gap: 20px;
-  text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
-    2px 2px 0 black;
-  /* Contours noirs */
-}
-
-.login-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.close-button {
-  align-self: flex-end;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.form-group {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.login-popup label {
-  width: 100%;
-  text-align: left;
-  /* Aligns the label text to the left */
-}
-
-.login-content h2 {
-  font-family: "Press Start 2P", cursive;
-  color: #b8b8b8;
-  /* Texte en blanc */
-  text-align: center;
-  margin-bottom: 50px;
-  text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
-    2px 2px 0 black;
-  /* Contours noirs */
-}
-
-.login-popup label {
-  color: #000;
-  /* Ceci définit la couleur du texte en noir */
-  text-align: center;
-  font-family: "Press Start 2P", cursive;
-  font-size: 15px;
-  letter-spacing: -2px;
-}
-
-.login-popup input {
-  color: #000;
-  /* Ceci définit la couleur du texte en noir */
-  text-align: center;
-  font-family: "Press Start 2P", cursive;
-  font-size: 13px;
-  letter-spacing: -2px;
-}
-
-.login-popup input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.custom-button {
-  font-family: "Press Start 2P", cursive;
-  margin-top: 20px;
-  width: 100%;
-  background-color: #848484;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
-    2px 2px 0 black;
-  /* Contours noirs */
-}
-
-.custom-button:hover {
-  color: #bd8630;
-  background-color: #e5edf5;
-  box-shadow: -2px -1px 8px 0px #000000, 2px 1px 8px 0px rgba(0, 0, 0, 0.48);
-}
-
-.register-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #f0f0f0;
-  /* Légère variation par rapport au login pour différencier */
-  padding: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  /* Ombre plus prononcée pour le style */
-  z-index: 1000;
-  border-radius: 15px;
-  width: 30%;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.register-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.register-content h2 {
-  font-family: "Press Start 2P", cursive;
-  color: #b8b8b8;
-  /* Texte en blanc */
-  text-align: center;
-  margin-bottom: 50px;
-  text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
-    2px 2px 0 black;
-  /* Contours noirs */
-}
-
-.register-popup label {
-  display: block;
-  color: #000;
-  text-align: center;
-  font-family: "Press Start 2P", cursive;
-  font-size: 15px;
-  margin-bottom: 5px;
-  /* Espacement avant le champ de saisie */
-}
-
-.register-popup input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  /* Plus d'espacement entre les champs */
-  border: 2px solid #ccc;
-  /* Bordure plus épaisse pour différencier */
-  border-radius: 5px;
-  font-family: "Press Start 2P", cursive;
-  /* Maintient de la police pour la cohérence */
-  font-size: 12px;
-  /* Ajustement pour l'inscription */
-  text-align: center;
-}
-
-.register-popup .custom-button {
-  font-family: "Press Start 2P", cursive;
-  margin-top: 25px;
-  /* Espacement supérieur pour le bouton */
-  width: 100%;
-  background-color: #757575;
-  /* Changement de couleur pour différencier */
-  color: #fff;
-  border: none;
-  padding: 12px;
-  /* Padding plus grand pour un meilleur visuel */
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.register-popup .custom-button:hover {
-  color: #bd8630;
-  background-color: #e5edf5;
-  box-shadow: -2px -1px 8px 0px #000000, 2px 1px 8px 0px rgba(0, 0, 0, 0.48);
-}
-
-/* Styles spécifiques à l'en-tête */
-
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  background-color: rgba(91, 144, 179, 0.8);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.logo img {
-  height: 60px;
-  margin-top: 10px;
-  /* Ajustez selon la taille de votre logo */
-}
-
-.main-nav {
-  display: flex;
-  align-items: center;
-}
-
-.main-nav ul {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
-
-.main-nav li {
-  padding: 0 15px;
-}
-
-.main-nav a {
-  text-decoration: none;
-  color: white;
-  padding: 5px;
-}
-
-input::placeholder {
-  opacity: 0.5;
-}
-
-/*
-MENU Deroulant
-*/
-.user-menu {
-  position: relative; /* Établit un contexte de positionnement pour le menu déroulant */
-}
-
-/* Styles généraux pour le menu déroulant */
-.dropdown-menu {
-  display: block;
-  position: absolute;
-  background-color: #a62700;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  top: 100%; /* Positionne le menu juste en dessous de l'élément parent */
-  right: 0; /* Aligner le menu à la droite de l'élément parent */
-  border-radius: 4px; /* Coins arrondis pour le menu */
-  top: calc(100% + 5px);
-}
-
-.dropdown-menu li {
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-menu li:hover {
-  background-color: #cacaca;
-}
-
-/* Styles spécifiques au texte du menu déroulant pour la personnalisation */
-.dropdown-text {
-  font-size: 13px; /* Taille personnalisable */
-  color: rgb(255, 0, 0); /* Couleur personnalisable */
-  text-shadow: none; /* Ombre personnalisable */
-  font-family: "Press Start 2P", cursive; /* Police personnalisable */
-}
-
-.user-menu li:hover .dropdown-menu {
-  display: block;
-}
-
-.error-message {
-  font-family: "Press Start 2P", cursive;
-  font-size: 13px;
-  color: red; /* Choisissez une couleur appropriée */
-  margin-bottom: 10px; /* Ajustez l'espacement selon vos besoins */
-  text-align: center; /* Centrez le message d'erreur */
-}
-</style>

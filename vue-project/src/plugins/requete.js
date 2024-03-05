@@ -4,8 +4,7 @@ class API {
     constructor() {
         this.axios = axios.create({
             baseURL: 'http://localhost:3001/api/v1/',
-            // timeout: 1000,
-            // headers: { 'X-Custom-Header': 'foobar' }
+
         });
     }
 
@@ -13,20 +12,20 @@ class API {
         return await this.axios.get(url);
     }
 
-    post(url, data) {
-        return this.axios.post(url, data);
+    async post(url, data) {
+        return await this.axios.post(url, data);
     }
 
-    put(url, data) {
-        return this.axios.put(url, data);
+    async put(url, data) {
+        return await this.axios.put(url, data);
     }
 
-    delete(url) {
-        return this.axios.delete(url);
+    async delete(url) {
+        return await this.axios.delete(url);
     }
 
-    patch(url, data) {
-        return this.axios.patch(url, data);
+    async patch(url, data) {
+        return await this.axios.patch(url, data);
     }
 }
 
