@@ -79,9 +79,9 @@ async function isAnswer(answer) {
       "Réponse choisi: ",
       answer
     );
-    if (answer.ID_Answer == response.data[0].answer.ID_Answer) {
+    if (answer.ID_Answer == response.data[0].answer) {
       console.log("la réponse est juste");
-      goodAnswer.value = answer;
+      goodAnswer.value = response.data[0].answer;
       emit("validate", true);
     } else {
       console.log("La réponse est fausse");

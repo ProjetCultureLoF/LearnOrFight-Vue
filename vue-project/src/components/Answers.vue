@@ -2,10 +2,12 @@
   <div
     @click="selectAnswer(answer)"
     :class="{
-      'bg-[#e84a4a] border-[#d63d3d] duration-200':
-        goodAnswer != answer && goodAnswer != null,
-      'bg-[#5a46da] border-[#5340cd] duration-200':
-        goodAnswer == answer && goodAnswer != null,
+      'bg-[#ed4e4e] border-[#d63d3d] duration-200':
+        goodAnswer !== null &&
+        goodAnswer.ID_Answer !== undefined &&
+        goodAnswer.ID_Answer !== answer.ID_Answer,
+      'bg-[#614ddf] border-[#5340cd] duration-200':
+        goodAnswer !== null && goodAnswer.ID_Answer === answer.ID_Answer,
     }"
     class="w-[20vw] lg:w-[23vw] bg-[#ffffff] border-t border-l border-r-4 border-b-4 rounded-md shadow duration-200 p-1 lg:p-2 hover:shadow-lg active:w-[24vw]"
   >
