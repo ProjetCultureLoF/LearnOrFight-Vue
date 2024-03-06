@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-row justify-between items-center p-2 bg-[#5b90b3cc] shadow-md"
+    class="flex flex-row justify-between items-center p-2 bg-[#a76a30] shadow-lg w-full"
   >
     <router-link to="/" class="mt-2">
       <img class="h-20" src="/src/assets/logo/lof-logo.png" alt="Logo" />
@@ -9,7 +9,7 @@
       >Créer quizz</router-link
     >
 
-    <nav class="main-nav">
+    <nav class="">
       <ul v-if="!isConnected" class="flex gap-4">
         <a href="#" @click="showLogin = true" class="text-white"
           >Se connecter</a
@@ -20,7 +20,7 @@
       </ul>
       <ul
         v-else
-        class="user-menu relative"
+        class="relative"
         @mouseover="dropdownVisible = true"
         @mouseleave="dropdownVisible = false"
       >
@@ -28,19 +28,19 @@
           <a href="#" class="text-white font-serif">{{ accountName }}</a>
           <ul
             v-if="dropdownVisible"
-            class="dropdown-menu absolute bg-[#5c2cae] min-w-max shadow-lg z-10 right-0 rounded-md top-full"
+            class="absolute bg-[#BF6415] min-w-max shadow-lg z-10 right-0 rounded-md top-full"
           >
             <li>
               <router-link
                 to="/account"
-                class="dropdown-text rounded-md block px-4 py-3 text-red-100 hover:bg-[#481e90]"
+                class="dropdown-text rounded-md block px-4 py-3 text-red-100 duration-100 hover:font-bold hover:shadow"
                 >Compte</router-link
               >
             </li>
             <li>
               <router-link
                 to="/leaderboard"
-                class="dropdown-text block px-4 py-3 text-red-100 hover:bg-[#481e90]"
+                class="dropdown-text block px-4 py-3 text-red-100 duration-100 hover:font-bold hover:shadow"
                 >Leaderboard</router-link
               >
             </li>
@@ -48,7 +48,7 @@
               <router-link
                 to="/"
                 @click="logout"
-                class="dropdown-text block px-4 py-3 rounded-md text-red-100 hover:bg-[#481e90]"
+                class="dropdown-text rounded-md block px-4 py-3 text-red-100 duration-100 hover:font-bold hover:shadow"
                 >Déconnexion</router-link
               >
             </li>
