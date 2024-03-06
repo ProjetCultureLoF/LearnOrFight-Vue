@@ -29,7 +29,7 @@
     </button>
     <button
       v-else
-      @click="$emit('nextQuestion')"
+      @click="nextQuestion"
       class="duration-200 rounded-md p-4 text-xs lg:text-2xl shadow"
     >
       Prochaine question
@@ -41,7 +41,7 @@
 <script setup>
 import Answers from "./Answers.vue";
 import { api } from "@/plugins/requete";
-import { inject, provide, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 const emit = defineEmits(["validate", "nextQuestion"]);
 
@@ -69,16 +69,10 @@ function selectAnswer(answer) {
 
 async function isAnswer(answer) {
   if (answer != null) {
-    console.log(props.quiz.ID_Quiz);
     const response = await api.get(
       `/quizAnswers/?quizIDQuiz=${props.quiz.ID_Quiz}&Is_QuizAnswer=1`
     );
-    console.log(
-      "Response API:",
-      response.data[0].answer,
-      "Réponse choisi: ",
-      answer
-    );
+
     if (answer.ID_Answer == response.data[0].answer) {
       console.log("la réponse est juste");
       goodAnswer.value = response.data[0].answer;
@@ -89,10 +83,13 @@ async function isAnswer(answer) {
       emit("validate", false);
     }
     errorMessages.value = "";
-    selectedAnswer.value = null;
   } else {
     errorMessages.value = "Vous devez selectionner une réponse";
   }
+}
+function nextQuestion() {
+  selectedAnswer.value = null;
+  emit("nextQuestion");
 }
 
 watch(
