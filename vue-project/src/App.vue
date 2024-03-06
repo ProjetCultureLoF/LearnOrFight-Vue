@@ -1,19 +1,21 @@
 <template>
-  <HeaderNav @isConnectedChange="(newValue) => (sendIsLogged = newValue)" />
-  <RouterView v-slot="{ Component }">
-    <template v-if="Component">
-      <KeepAlive>
-        <Suspense>
-          <!-- main content -->
-          <component :is="Component"></component>
+  <div class="h-[100vh]">
+    <HeaderNav @isConnectedChange="(newValue) => (sendIsLogged = newValue)" />
+    <RouterView v-slot="{ Component }">
+      <template v-if="Component">
+        <KeepAlive>
+          <Suspense>
+            <!-- main content -->
+            <component :is="Component"></component>
 
-          <!-- loading state -->
-          <template #fallback> Loading... </template>
-        </Suspense>
-      </KeepAlive>
-    </template>
-  </RouterView>
-  <Footer />
+            <!-- loading state -->
+            <template #fallback> Loading... </template>
+          </Suspense>
+        </KeepAlive>
+      </template>
+    </RouterView>
+    <Footer />
+  </div>
 </template>
 
 <script>
