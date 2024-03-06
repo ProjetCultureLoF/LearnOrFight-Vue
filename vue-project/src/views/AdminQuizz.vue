@@ -11,14 +11,14 @@
       >
         <button
           @click="deleteQuiz(quiz.ID_Quiz)"
-          class="bg-[#745cbccc] hover:bg-[#634ca8cc] duration-200 rounded-md p-2 w-fit"
+          class="duration-200 rounded-md p-2 w-fit"
         >
           Supprimer
         </button>
       </Quiz>
     </div>
 
-    <div id="quiz" class="flex flex-row gap-2 text-center items-center">
+    <div id="quiz" class="flex flex-row gap-2 text-center items-center m-8">
       <input
         type="text"
         v-model="quizName"
@@ -174,19 +174,3 @@ async function createQuiz() {
   }
 }
 </script>
-
-<style scoped>
-.active::before {
-  content: "";
-  position: absolute;
-  border-color: #009933;
-  border-style: solid;
-  border-width: 0 0.3em 0.25em 0;
-  height: 1em;
-  top: 1.3em;
-  left: 0.6em;
-  margin-top: -1em;
-  transform: rotate(45deg);
-  width: 0.5em;
-}
-</style>

@@ -1,5 +1,8 @@
 <template>
-  <div id="map"></div>
+  <div
+    id="map"
+    class="bg-blue-400 rounded-lg border-black border-2 m-5 p-1"
+  ></div>
 </template>
 
 <script setup>

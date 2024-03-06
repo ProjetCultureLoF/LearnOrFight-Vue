@@ -1,8 +1,8 @@
 <template>
   <div id="answers" class="flex flex-col items-center text-center w-1/2 gap-5">
-    <p class="font-bold text-5xl">{{ quiz.Question_Quiz }}</p>
-    <p class="font-semibold text-3xl">{{ quiz.themes[0].Title_Theme }}</p>
-    <p v-if="admin == false" class="font-bold text-3xl">{{ time }}</p>
+    <h1 class="font-bold">{{ quiz.Question_Quiz }}</h1>
+    <h3 class="font-semibold">{{ quiz.themes[0].Title_Theme }}</h3>
+    <h2 v-if="admin == false" class="font-bold">{{ time }}</h2>
     <slot></slot>
     <div class="flex flex-wrap gap-5 justify-center items-center max-w-full">
       <Answers
@@ -10,12 +10,9 @@
         :key="index"
         :answer="answer"
         :selectedAnswer="selectedAnswer"
-        @selectAnswer="selectAnswer(answer)"
+        @selectAnswer="selectAnswer"
       >
-        <button
-          v-if="admin"
-          class="bg-[#5b90b3cc] hover:bg-[#467798cc] duration-200 rounded-md p-2"
-        >
+        <button v-if="admin" class="duration-200 rounded-md p-2">
           Modifier
         </button>
       </Answers>
@@ -25,14 +22,14 @@
     <button
       v-if="waitNext == false"
       @click="isAnswer(selectedAnswer)"
-      class="bg-[#745cbccc] hover:bg-[#634ca8cc] duration-200 rounded-md p-4 text-3xl"
+      class="duration-200 rounded-md p-4 text-xs lg:text-2xl shadow"
     >
       Valider
     </button>
     <button
       v-else
       @click="$emit('nextQuestion')"
-      class="bg-[#745cbccc] hover:bg-[#634ca8cc] duration-200 rounded-md p-4 text-xs lg:text-2xl"
+      class="duration-200 rounded-md p-4 text-xs lg:text-2xl shadow"
     >
       Prochaine question
     </button>
@@ -64,6 +61,8 @@ const errorMessages = ref("");
 const time = ref(30);
 
 function selectAnswer(answer) {
+  console.log(answer);
+
   selectedAnswer.value = answer;
 }
 
