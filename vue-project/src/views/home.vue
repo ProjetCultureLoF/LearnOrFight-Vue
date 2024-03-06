@@ -2,7 +2,6 @@
   <div id="home">
     <Map v-if="isLogged" />
     <ScoreBoard />
-    <Clans />
   </div>
 </template>
 
