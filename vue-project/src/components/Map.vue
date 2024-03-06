@@ -145,11 +145,9 @@ function themeAleatoire() {
 
 onMounted(async () => {
   await loadData();
-
-  for (let code of codeDepartements.value) {
-    let theme = themeAleatoire();
-    departements.value.set(code, theme);
-    api.post(`/departments/theme/${code}/${theme}`);
+  const departments = await api.get(`/departments/`);
+  for (let code of departments.data) {
+    departements.value.set(code.Code_Department, code.themes[0].Title_Theme);
   }
 
   const svg = d3

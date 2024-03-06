@@ -13,6 +13,7 @@ const quizRoute = require('./routes/quizRoute');
 const answerRoute = require('./routes/answerRoute');
 const quizAnswersRoute = require('./routes/quizAnswersRoute');
 const themeQuizRoute = require('./routes/themeQuizRoute');
+const randomize = require('./randomize')
 
 const port = 3001;
 const corsOptions = {
@@ -47,4 +48,6 @@ db.sync({force: false}).then(() => {
     });
 }).catch(error => {
     console.error('Erreur lors de la synchronisation de la base de données:', error);
-});;
+});
+randomize();
+
