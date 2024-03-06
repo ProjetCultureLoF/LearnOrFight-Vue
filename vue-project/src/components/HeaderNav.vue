@@ -59,69 +59,82 @@
   </div>
   <transition name="fade">
     <div
-      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-200 p-10 shadow-lg rounded-lg w-1/3 min-w-max flex flex-col items-center z-50"
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-3 shadow-lg rounded-lg w-2/5 min-w-max h-fill flex flex-col text-center items-center z-50 gap-7"
       v-if="showLogin"
     >
-      <div class="login-content">
-        <button class="close-button self-end text-2xl" @click="close">X</button>
-        <h2>On s'est déjà vu?</h2>
-        <form @submit.prevent="login">
-          <div class="form-group">
-            <label for="username">Nom d'utilisateur:</label>
-            <input id="username" v-model="username" type="text" required />
-          </div>
-          <div class="form-group">
-            <label for="password">Mot de passe:</label>
-            <input id="password" v-model="password" type="password" required />
-          </div>
-          <div v-if="loginError" class="error-message">{{ loginError }}</div>
-          <button class="custom-button" @click="logginUser" type="submit">
-            Se connecter
-          </button>
-        </form>
-      </div>
+      <img
+        src="/src/assets/icons/clair.png"
+        class="self-end w-8 hover:w-10 duration-200"
+        @click="close"
+      />
+      <h2>On s'est déjà vu?</h2>
+      <form @submit.prevent="login" class="flex flex-col gap-5">
+        <div class="flex flex-col gap-5">
+          <input
+            id="username"
+            v-model="username"
+            type="text"
+            required
+            placeholder="Nom d'utilisateur"
+          />
+        </div>
+        <div class="flex flex-col gap-5">
+          <input
+            id="password"
+            v-model="password"
+            type="password"
+            required
+            placeholder="Mot de passe"
+          />
+        </div>
+        <div v-if="loginError" class="error-message">{{ loginError }}</div>
+        <button class="bg-[#a76a30]" @click="logginUser" type="submit">
+          Se connecter
+        </button>
+      </form>
     </div>
   </transition>
 
   <!-- Inscription -->
   <transition name="fade">
     <div
-      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-10 shadow-md rounded-lg w-1/3 min-w-max flex flex-col items-center z-50"
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-3 shadow-lg rounded-lg w-2/5 min-w-max h-fill flex flex-col text-center items-center z-50 gap-7"
       v-if="showRegister"
     >
-      <div class="register-content">
-        <button class="close-button self-end text-2xl" @click="close">X</button>
-        <h2>Première visite ?</h2>
-        <form @submit.prevent="register">
-          <div class="form-group">
-            <label for="reg-username">Nom d'utilisateur:</label>
-            <input id="reg-username" v-model="username" type="text" required />
-          </div>
-          <div class="form-group">
-            <label for="reg-email">Email:</label>
-            <input
-              id="reg-email"
-              v-model="mail"
-              type="email"
-              placeholder="mail@exemple.com"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="reg-password">Mot de passe:</label>
-            <input
-              id="reg-password"
-              v-model="password"
-              type="password"
-              required
-            />
-          </div>
-          <div v-if="registerError" class="error-message">
-            {{ registerError }}
-          </div>
-          <button class="custom-button" type="submit">S'inscrire</button>
-        </form>
-      </div>
+      <img
+        src="/src/assets/icons/clair.png"
+        class="self-end w-8 hover:w-10 duration-200"
+        @click="close"
+      />
+      <h2>Première visite ?</h2>
+      <form @submit.prevent="register" class="flex flex-col gap-5">
+        <input
+          id="reg-username"
+          v-model="username"
+          type="text"
+          required
+          placeholder="Nom d'utilisateur"
+        />
+
+        <input
+          id="reg-email"
+          v-model="mail"
+          type="email"
+          placeholder="mail@exemple.com"
+          required
+        />
+        <input
+          id="reg-password"
+          v-model="password"
+          type="password"
+          required
+          placeholder="Mot de passe"
+        />
+        <div v-if="registerError" class="error-message">
+          {{ registerError }}
+        </div>
+        <button class="custom-button" type="submit">S'inscrire</button>
+      </form>
     </div>
   </transition>
   <Overlay v-if="showLogin || showRegister" />

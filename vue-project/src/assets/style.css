@@ -2,12 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
 @layer base {
+    html{
+      @apply font-oswald font-semibold  ;
+    }
     h1 {
-      @apply text-5xl;
+      @apply text-5xl font-extrabold;
     }
     h2 {
-      @apply text-4xl;
+      @apply text-4xl font-bold;
     }
     h3 {
         @apply text-3xl;
@@ -19,9 +24,16 @@
         @apply bg-[#ffe5d0]
     }
     button{
-        @apply bg-[#BF6415] hover:bg-[#bf6415ec]
+        @apply bg-[#BF6415] hover:bg-[#bf6415ec] rounded p-1 duration-200
     }
     p{
         @apply text-[#000000]
     }
+    label{
+      @apply text-3xl font-medium;
+    }
+    input{
+      @apply border-b-2 bg-transparent text-black h-8 active:border-b-2
+    }
+
   }
