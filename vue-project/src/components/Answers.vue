@@ -2,25 +2,26 @@
   <div
     @click="selectAnswer(answer)"
     :class="{
-      'bg-[#5487d9] hover:bg-[#3f72c4] duration-200': isActive == answer,
+      'bg-blue-400 hover:bg-blue-400 duration-200': selectedAnswer == answer,
     }"
-    class="w-[400px] bg-gray-200 rounded-md hover:bg-gray-300 duration-200 p-1"
+    class="w-[20vw] lg:w-[23vw] bg-gray-200 rounded-md hover:bg-blue-300 hover:w-[24vw] shadow duration-200 p-1 lg:p-2"
   >
-    <p class="text-2xl font-semibold">{{ answer.Text_Answer }}</p>
+    <p
+      class="text-sm md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-semibold"
+    >
+      {{ answer.Text_Answer }}
+    </p>
   </div>
   <slot></slot>
 </template>
 
 <script setup>
-import { inject } from "vue";
-
 const props = defineProps({
   answer: Object,
+  selectedAnswer: Object,
 });
 
 const emit = defineEmits(["selectAnswer"]);
-
-const isActive = inject("changeColor");
 
 function selectAnswer(answer) {
   emit("selectAnswer", answer);

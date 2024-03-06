@@ -9,6 +9,7 @@
         v-for="(answer, index) in quiz.answers"
         :key="index"
         :answer="answer"
+        :selectedAnswer="selectedAnswer"
         @selectAnswer="selectAnswer(answer)"
       >
         <button
@@ -24,14 +25,14 @@
     <button
       v-if="waitNext == false"
       @click="isAnswer(selectedAnswer)"
-      class="bg-[#745cbccc] hover:bg-[#634ca8cc] duration-200 rounded-md p-2"
+      class="bg-[#745cbccc] hover:bg-[#634ca8cc] duration-200 rounded-md p-4 text-3xl"
     >
       Valider
     </button>
     <button
       v-else
       @click="$emit('nextQuestion')"
-      class="bg-slate-400 rounded-md p-2"
+      class="bg-[#745cbccc] hover:bg-[#634ca8cc] duration-200 rounded-md p-4 text-xs lg:text-2xl"
     >
       Prochaine question
     </button>
@@ -59,7 +60,6 @@ const props = defineProps({
 });
 
 const selectedAnswer = ref(null);
-provide("changeColor", selectedAnswer);
 const errorMessages = ref("");
 const time = ref(30);
 

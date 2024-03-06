@@ -64,7 +64,21 @@
     >
       <div class="login-content">
         <button class="close-button self-end text-2xl" @click="close">X</button>
-        <!-- Contenu de connexion -->
+        <h2>On s'est déjà vu?</h2>
+        <form @submit.prevent="login">
+          <div class="form-group">
+            <label for="username">Nom d'utilisateur:</label>
+            <input id="username" v-model="username" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Mot de passe:</label>
+            <input id="password" v-model="password" type="password" required />
+          </div>
+          <div v-if="loginError" class="error-message">{{ loginError }}</div>
+          <button class="custom-button" @click="logginUser" type="submit">
+            Se connecter
+          </button>
+        </form>
       </div>
     </div>
   </transition>
@@ -77,7 +91,36 @@
     >
       <div class="register-content">
         <button class="close-button self-end text-2xl" @click="close">X</button>
-        <!-- Contenu d'inscription -->
+        <h2>Première visite ?</h2>
+        <form @submit.prevent="register">
+          <div class="form-group">
+            <label for="reg-username">Nom d'utilisateur:</label>
+            <input id="reg-username" v-model="username" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email:</label>
+            <input
+              id="reg-email"
+              v-model="mail"
+              type="email"
+              placeholder="mail@exemple.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Mot de passe:</label>
+            <input
+              id="reg-password"
+              v-model="password"
+              type="password"
+              required
+            />
+          </div>
+          <div v-if="registerError" class="error-message">
+            {{ registerError }}
+          </div>
+          <button class="custom-button" type="submit">S'inscrire</button>
+        </form>
       </div>
     </div>
   </transition>
