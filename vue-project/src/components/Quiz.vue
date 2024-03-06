@@ -10,6 +10,7 @@
         :key="index"
         :answer="answer"
         :selectedAnswer="selectedAnswer"
+        :goodAnswer="goodAnswer"
         @selectAnswer="selectAnswer"
       >
         <button v-if="admin" class="duration-200 rounded-md p-2">
@@ -59,7 +60,7 @@ const props = defineProps({
 const selectedAnswer = ref(null);
 const errorMessages = ref("");
 const time = ref(30);
-
+const goodAnswer = ref(null);
 function selectAnswer(answer) {
   console.log(answer);
 
@@ -68,10 +69,25 @@ function selectAnswer(answer) {
 
 async function isAnswer(answer) {
   if (answer != null) {
+    console.log(props.quiz.ID_Quiz);
     const response = await api.get(
-      `/quizAnswers/?answerIDAnswer=${answer.ID_Answer}`
+      `/quizAnswers/?quizIDQuiz=${props.quiz.ID_Quiz}&Is_QuizAnswer=1`
     );
-    emit("validate", response.data.Is_QuizAnswer);
+    console.log(
+      "Response API:",
+      response.data[0].answer,
+      "Réponse choisi: ",
+      answer
+    );
+    if (answer.ID_Answer == response.data[0].answer.ID_Answer) {
+      console.log("la réponse est juste");
+      goodAnswer.value = answer;
+      emit("validate", true);
+    } else {
+      console.log("La réponse est fausse");
+      goodAnswer.value = response.data[0].answer;
+      emit("validate", false);
+    }
     errorMessages.value = "";
     selectedAnswer.value = null;
   } else {

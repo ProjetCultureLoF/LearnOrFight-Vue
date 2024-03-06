@@ -18,7 +18,10 @@
       </Quiz>
     </div>
 
-    <div id="quiz" class="flex flex-row gap-2 text-center items-center m-8">
+    <div
+      id="quiz"
+      class="flex flex-wrap flex-row gap-2 text-center justify-center items-center m-8"
+    >
       <input
         type="text"
         v-model="quizName"

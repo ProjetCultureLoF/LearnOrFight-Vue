@@ -2,7 +2,10 @@
   <div
     @click="selectAnswer(answer)"
     :class="{
-      'bg-[#023E74] duration-200': selectedAnswer == answer,
+      'bg-[#e84a4a] border-[#d63d3d] duration-200':
+        goodAnswer != answer && goodAnswer != null,
+      'bg-[#5a46da] border-[#5340cd] duration-200':
+        goodAnswer == answer && goodAnswer != null,
     }"
     class="w-[20vw] lg:w-[23vw] bg-[#ffffff] border-t border-l border-r-4 border-b-4 rounded-md shadow duration-200 p-1 lg:p-2 hover:shadow-lg active:w-[24vw]"
   >
@@ -20,6 +23,10 @@
 const props = defineProps({
   answer: Object,
   selectedAnswer: Object,
+  goodAnswer: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits(["selectAnswer"]);
