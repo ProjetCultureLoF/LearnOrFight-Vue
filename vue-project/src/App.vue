@@ -13,15 +13,16 @@
       </KeepAlive>
     </template>
   </RouterView>
+  <Footer />
 </template>
 
 <script>
 import { ref, provide, computed } from "vue";
 import HeaderNav from "./components/HeaderNav.vue";
-
+import Footer from "./components/Footer.vue";
 export default {
   name: "App",
-  components: { HeaderNav },
+  components: { HeaderNav, Footer },
   setup() {
     const isLogged = ref(false);
     const sendIsLogged = computed({

@@ -1,29 +1,14 @@
 <template>
-    <footer class="footer">
-        <div class="container">
-            <p>© 2024 Tous droits réservés. Learn or Fight.</p>
-        </div>
-    </Footer>
+  <footer
+    class="flex absolute bg-opacity-45 bg-black w-full text-center justify-center"
+  >
+    <div class="container">
+      <p>© {{ date }} Tous droits réservés. Learn or Fight.</p>
+    </div>
+  </footer>
 </template>
 
-<script>
-export default {
-    name: 'Footer'
-}
+<script setup>
+import { ref } from "vue";
+const date = ref(new Date());
 </script>
-
-
-<style scoped>
-
-footer {
-    text-align: center;
-    padding: 7px 0;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-}
-
-
-</style>
