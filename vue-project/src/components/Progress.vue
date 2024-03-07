@@ -4,10 +4,10 @@
       <div
         class="flex flex-row border-black border-4 rounded-full w-6 h-6 justify-center duration-200"
         :class="{
-          'bg-blue-500': index == current,
-          'bg-green-500': index <= current && listWasTrue[index],
+          '': index == current,
+          'bg-blue-500': index <= current && listWasTrue[index],
 
-          'bg-red-500': index !== current || !listWasTrue[index],
+          'bg-red-500': listWasTrue[index] === false || index > current,
         }"
         v-for="(element, index) of list"
         :key="index"
@@ -15,6 +15,7 @@
         <p v-if="index <= current" class="flex flex-col relative top-full">
           {{ element.Question_Quiz }}
         </p>
+        <p v-else class="flex flex-col relative top-full italic">?</p>
       </div>
     </div>
   </div>
