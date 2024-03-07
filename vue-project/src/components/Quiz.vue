@@ -59,7 +59,7 @@ const props = defineProps({
 
 const selectedAnswer = ref(null);
 const errorMessages = ref("");
-const time = ref(30);
+const time = props.admin ? ref(0) : ref(30);
 const goodAnswer = ref(null);
 function selectAnswer(answer) {
   console.log(answer);
