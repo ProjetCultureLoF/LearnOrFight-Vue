@@ -1,8 +1,8 @@
 <template>
   <div id="answers" class="flex flex-col items-center text-center w-1/2 gap-5">
-    <h1 class="font-bold">{{ quiz.Question_Quiz }}</h1>
-    <h3 class="font-semibold">{{ quiz.themes[0].Title_Theme }}</h3>
-    <h2 v-if="admin == false" class="font-bold">{{ time }}</h2>
+    <h1 class="">{{ quiz.Question_Quiz }}</h1>
+    <h3 class="">{{ quiz.themes[0].Title_Theme }}</h3>
+    <h2 v-if="admin == false" class="duration-200">{{ time }}</h2>
     <slot></slot>
     <div class="flex flex-wrap gap-5 justify-center items-center max-w-full">
       <Answers
@@ -73,13 +73,13 @@ async function isAnswer(answer) {
       `/quizAnswers/?quizIDQuiz=${props.quiz.ID_Quiz}&Is_QuizAnswer=1`
     );
 
-    if (answer.ID_Answer == response.data[0].answer) {
-      console.log("la réponse est juste");
+    if (answer.ID_Answer == response.data[0].answer.ID_Answer) {
       goodAnswer.value = response.data[0].answer;
+
       emit("validate", true);
     } else {
-      console.log("La réponse est fausse");
       goodAnswer.value = response.data[0].answer;
+
       emit("validate", false);
     }
     errorMessages.value = "";
@@ -89,6 +89,7 @@ async function isAnswer(answer) {
 }
 function nextQuestion() {
   selectedAnswer.value = null;
+  goodAnswer.value = null;
   emit("nextQuestion");
 }
 
@@ -101,6 +102,7 @@ watch(
       }, 1000);
     }
     if (count == 0) {
+      isAnswer({ ID_Answer: 0 });
       emit("validate", false);
     }
   },
