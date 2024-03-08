@@ -37,4 +37,7 @@
       @apply border-b-2 bg-transparent text-black h-8 active:border-b-4;
     }
 
+    ::placeholder{
+      @apply italic
+    }
   }

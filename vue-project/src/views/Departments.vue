@@ -52,21 +52,9 @@ const isFinished = ref(false);
 const waitNext = ref(false);
 
 async function getQuizes() {
-  const departments = await api.get(
-    `/departments/?Name_Department=${route.params.dep}`
-  );
-  //console.log(departments.data);
-  const themeQuizes = await api.get(
-    `/themeQuiz/?themeIDTheme=${departments.data[0].themes[0].ID_Theme}`
-  );
-  //console.log(themeQuizes.data);
-  for (let i = 0; i < themeQuizes.data.length; i++) {
-    const quizesApi = await api.get(
-      `/quiz/byId/${themeQuizes.data[i].quizIDQuiz}`
-    );
-    quizes.value.push(quizesApi.data);
-    //console.log(quizes.value);
-  }
+  const response = await api.get(`quiz/byDepartment/used/${route.params.dep}`);
+  console.log(response.data);
+  quizes.value = response.data;
 }
 
 function waitNextQuestion(answer) {

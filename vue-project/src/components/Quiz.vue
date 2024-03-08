@@ -3,6 +3,12 @@
     <h1 class="">{{ quiz.Question_Quiz }}</h1>
     <h3 class="">{{ quiz.themes[0].Title_Theme }}</h3>
     <h2 v-if="admin == false" class="duration-200">{{ time }}</h2>
+    <div v-if="admin" class="flex flex-row justify-center gap-3">
+      <h3 class="">Utilisé:</h3>
+      <input type="checkbox" v-model="isUsed" />
+      <button @click="updateIsUsed">Modifier</button>
+    </div>
+
     <slot></slot>
     <div class="flex flex-wrap gap-5 justify-center items-center max-w-full">
       <Answers
@@ -61,6 +67,15 @@ const selectedAnswer = ref(null);
 const errorMessages = ref("");
 const time = props.admin ? ref(0) : ref(30);
 const goodAnswer = ref(null);
+const isUsed = props.quiz.themeQuizzes
+  ? ref(props.quiz.themeQuizzes[0].Used_ThemeQuiz)
+  : ref(props.quiz.themeQuiz.Used_ThemeQuiz);
+
+function updateIsUsed() {
+  api.patch(
+    `/themeQuiz/${props.quiz.themeQuizzes[0].ID_ThemeQuiz}?Used_ThemeQuiz=${isUsed.value}`
+  );
+}
 function selectAnswer(answer) {
   console.log(answer);
 
@@ -87,6 +102,7 @@ async function isAnswer(answer) {
     errorMessages.value = "Vous devez selectionner une réponse";
   }
 }
+
 function nextQuestion() {
   selectedAnswer.value = null;
   goodAnswer.value = null;
@@ -103,7 +119,6 @@ watch(
     }
     if (count == 0) {
       isAnswer({ ID_Answer: 0 });
-      emit("validate", false);
     }
   },
   {

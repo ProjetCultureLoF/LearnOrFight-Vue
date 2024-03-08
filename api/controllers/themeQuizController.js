@@ -76,11 +76,24 @@ async function createThemeQuiz(req, res){
 
 async function patchThemeQuiz(req, res){
     try{
-        const { quizId, themeId, used } = req.params;
-        
+        const { id } = req.params;
+        const { quizIDQuiz, themeIDTheme, ID_ThemeQuiz, Used_ThemeQuiz } = req.query;
+        const criteria = { };
+        if(quizIDQuiz){
+            criteria.quizIDQuiz = quizIDQuiz
+        }
+        if(themeIDTheme){
+            criteria.themeIDTheme = themeIDTheme
+        }
+        if(ID_ThemeQuiz){
+            criteria.ID_ThemeQuiz = ID_ThemeQuiz
+        }
+        if(Used_ThemeQuiz){
+            criteria.Used_ThemeQuiz = Used_ThemeQuiz
+        }
         const themeQuiz = await ThemeQuiz.update(
-            {Used_ThemeQuiz: used},
-            { where: { quizIDQuiz: quizId, themeIDTheme: themeId } 
+            criteria,
+            { where: { ID_ThemeQuiz: id } 
         });
 
         res.status(200).json(themeQuiz);

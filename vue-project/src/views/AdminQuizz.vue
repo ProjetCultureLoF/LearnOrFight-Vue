@@ -125,15 +125,11 @@ const questions = computed(() => {
 
 async function getQuizes() {
   const tempValue = await api.get(`/quiz`);
-  console.log(tempValue.data);
 
   quizes.value = tempValue.data;
 }
 async function getThemes() {
   const tempValue = await api.get(`/themes`);
-  console.log(tempValue.data);
-
-  themes.value = tempValue.data;
   themes.value = tempValue.data;
 }
 
@@ -145,7 +141,6 @@ onBeforeMount(async () => {
 async function deleteQuiz(quizId) {
   try {
     await api.delete(`quiz/byId/${quizId}`).then((response) => {
-      console.log(response.data);
       quizes.value = quizes.value.filter((quiz) => quiz.ID_Quiz != quizId);
     });
   } catch (error) {
