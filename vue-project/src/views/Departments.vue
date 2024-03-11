@@ -15,6 +15,7 @@
       >
         Mauvaises réponses: {{ badAnswer }}
       </h2>
+      <h1>{{ score }}</h1>
     </div>
 
     <div
@@ -39,6 +40,7 @@ import { onMounted, ref } from "vue";
 import { api } from "@/plugins/requete";
 import { useRoute } from "vue-router";
 import Progress from "@/components/Progress.vue";
+import Cookies from "js-cookie";
 const route = useRoute();
 
 const quizes = ref([]);
@@ -50,7 +52,7 @@ const wasTrue = ref(null);
 const isFinished = ref(false);
 
 const waitNext = ref(false);
-
+const score = ref(0);
 async function getQuizes() {
   const response = await api.get(`quiz/byDepartment/used/${route.params.dep}`);
   console.log(response.data);
@@ -76,11 +78,25 @@ function nextQuestion() {
   }
   if (currentQuiz.value == quizes.value.length) {
     isFinished.value = true;
+    score.value = goodAnswer.value * 150;
+    console.log(Cookies.get("token"));
+    api.post(
+      `/scores/${Cookies.get("token")}/${route.params.dep}/${score.value}`
+    );
   }
   wasTrue.value = null;
 }
 
 onMounted(async () => {
   await getQuizes();
+  const response = await api.get(
+    `/scores/${Cookies.get("token")}/${route.params.dep}`
+  );
+  if (response.data) {
+    isFinished.value = true;
+    score.value = response.data.User_Score;
+    goodAnswer.value = score.value / 150;
+    badAnswer.value = quizes.value.length - goodAnswer.value;
+  }
 });
 </script>

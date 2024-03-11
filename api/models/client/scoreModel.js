@@ -31,4 +31,7 @@ const Score = db.define("score", {
 User.belongsToMany(Department, {through: Score, foreignKey: "ID_User"});
 Department.belongsToMany(User, {through: Score, foreignKey: "ID_Department"});
 
+User.hasMany(Score);
+Score.belongsTo(User); 
+
 module.exports = {db, Score, User, Department};

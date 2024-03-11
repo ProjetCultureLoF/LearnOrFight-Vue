@@ -41,8 +41,7 @@ app.use('/api/v1/answers', answerRoute);
 app.use('/api/v1/quizAnswers', quizAnswersRoute);
 app.use('/api/v1/themeQuiz', themeQuizRoute);
 
-
-db.sync({force: false}).then(() => {
+db.sync({}).then(() => {
     app.listen(port, () => {
         console.log(`Le serveur est bien lancé sur http://localhost:${port}`)
     });

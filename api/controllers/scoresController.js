@@ -1,8 +1,12 @@
-const { Score } = require('../models/client/scoreModel');
+const { Score, User, Department } = require('../models/client/scoreModel');
+User.sync({alter: true})
 
 async function getAll(req, res){
     try{
-        const score = await Score.findAll();
+        const score = await Score.findAll({include: [{
+            model: User,
+            through: {attributes : []}
+        }], order: ["User_Score", "DESC"]});
 
         res.status(200).json(score);
     }catch(error){
@@ -25,8 +29,10 @@ async function getUserScores(req, res){
 
 async function getUserDepartementScore(req, res){
     try{
-        const {userId, departmentId} = req.params
-        const score = await Score.findOne({ where: { ID_User: userId, ID_Department: departmentId }});
+        const {userToken, depName} = req.params
+        const user = await User.findOne({where: {Token_User: userToken}});
+        const department = await Department.findOne({where: {Name_Department: depName} });
+        const score = await Score.findOne({ where: { ID_User: user.ID_User, ID_Department: department.ID_Department }});
 
         res.status(200).json(score);
     }catch(error){
@@ -38,16 +44,11 @@ async function getUserDepartementScore(req, res){
 
 async function createUserScore(req, res){
     try{
-        const {userId, departmentId, amount} = req.params
-        let score = ""
-        const isScore = await Score.findOne({ where: { ID_User: parseInt(userId), ID_Department: parseInt(departmentId)} });
-        if (isScore){
-            score = await Score.update({User_Score: amount}, { where: { ID_User: userId, ID_Department: departmentId } });
-        }
-        else{
-            score = await Score.create({ ID_User: parseInt(userId), ID_Department: parseInt(departmentId), User_Score: amount });
+        const {userToken, depName, amount} = req.params
+        const user = await User.findOne({where: {Token_User: userToken}});
+        const department = await Department.findOne({where: {Name_Department: depName} });
+        const score = await Score.create({  ID_User: user.ID_User, ID_Department: department.ID_Department, User_Score: amount });
 
-        }
         res.status(200).json(score);
     }catch(error){
         console.log(error);

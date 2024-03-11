@@ -1,38 +1,30 @@
 <template>
   <div id="home">
     <Map v-if="isLogged" />
-    <ScoreBoard />
+    <ScoreBoard :listScore="listScore" />
   </div>
 </template>
 
-<script>
+<script setup>
 import Map from "@/components/Map.vue";
 import ScoreBoard from "@/components/ScoreBoard.vue";
-import { ref, inject, computed } from "vue";
+import { ref, inject, computed, onMounted } from "vue";
 import Clans from "@/components/Clans.vue";
+import { api } from "@/plugins/requete";
 
-export default {
-  components: { Map, ScoreBoard, Clans },
-  setup() {
-    const isLoggedRef = inject("isLogged");
+const isLoggedRef = inject("isLogged");
 
-    const isLogged = computed(() => isLoggedRef.value);
+const isLogged = computed(() => isLoggedRef.value);
 
-    return { isLogged };
-  },
-};
+const listScore = ref();
+
+async function getScores() {
+  const response = await api.get(`/scores`);
+  listScore.value = response.data;
+}
+
+onMounted(async () => {
+  await getScores();
+  console.log(listScore.value);
+});
 </script>
-
-<style>
-/* Réinitialisation des styles de base */
-body {
-  margin: 0;
-  padding: 0;
-}
-#home {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-</style>
