@@ -1,7 +1,7 @@
 <template>
-  <div id="home">
-    <Map v-if="isLogged" />
-    <ScoreBoard :listScore="listScore" />
+  <div id="home" class="flex flex-row flex-wrap justify-center pt-16 lg:gap-36">
+    <Map v-if="isLogged" class="m-6" />
+    <ScoreBoard :listScore="listScore" class="m-6" />
   </div>
 </template>
 

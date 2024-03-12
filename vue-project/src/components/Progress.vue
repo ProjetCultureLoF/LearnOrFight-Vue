@@ -12,10 +12,12 @@
         v-for="(element, index) of list"
         :key="index"
       >
-        <p v-if="index <= current" class="flex flex-col relative top-full">
-          {{ element.Question_Quiz }}
-        </p>
-        <p v-else class="flex flex-col relative top-full italic">?</p>
+        <div class="flex flex-col relative top-full bg-transparent">
+          <p v-if="index <= current" class="xs:text-base font-semibold">
+            {{ element.Question_Quiz }}
+          </p>
+          <p v-else class="flex flex-col relative top-full italic">?</p>
+        </div>
       </div>
     </div>
   </div>

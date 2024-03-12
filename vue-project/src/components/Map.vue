@@ -1,12 +1,12 @@
 <template>
   <div
     id="map"
-    class="bg-blue-400 rounded-lg border-black border-2 m-5 p-1"
+    class="bg-blue-400 rounded-lg border-black border-2 m-5 p-2"
   ></div>
 </template>
-
+//max-lg:w-[${width} max-lg:h-[${width}]
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { api } from "@/plugins/requete";
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 const dataFrance = ref("");
@@ -26,8 +26,23 @@ async function loadData() {
   }
 }
 
-const height = ref(600);
-const width = ref(600);
+const width = computed(() => {
+  console.log;
+  let width = null;
+  if (window.innerWidth < 600) {
+    return Math.round(window.innerWidth / 1.2);
+  } else if (window.innerWidth > 1200) {
+    return Math.round(window.innerWidth / 3);
+  }
+});
+
+watch(
+  () => window.innerWidth,
+  ([newWidth]) => {
+    projection.fitSize([newWidth, newWidth], dataFrance.value);
+  }
+);
+
 const departements = ref(new Map());
 const codeDepartements = ref([
   "01",
@@ -145,23 +160,16 @@ function themeAleatoire() {
   let index = Math.floor(Math.random() * themes.length);
   return themes[index];
 }
-
-onMounted(async () => {
-  await loadData();
-  const departments = await api.get(`/departments/`);
-  for (let code of departments.data) {
-    departements.value.set(code.Code_Department, code.themes[0].Title_Theme);
-  }
-
+async function drawMap() {
   const svg = d3
     .select("#map")
     .append("svg")
     .attr("width", width.value)
-    .attr("height", height.value);
+    .attr("height", width.value);
   const projection = d3
     .geoMercator()
-    .fitSize([height.value, width.value], dataFrance.value);
-  const path = d3.geoPath().projection(projection); // // Ajouter les départements à la carte
+    .fitSize([width.value, width.value], dataFrance.value);
+  const path = d3.geoPath().projection(projection); // // Ajouter les departements à la carte
   svg
     .selectAll("path")
     .data(dataFrance.value.features)
@@ -176,7 +184,7 @@ onMounted(async () => {
     .attr("class", (d) => departements.value.get(d.properties.code))
     .attr("stroke", "#666")
     .attr("stroke-width", 1);
-  // Statistiques sur le nombre de départements par thème
+  // Statistiques sur le nombre de departements par theme
   let stats = new Map();
   for (let theme of departements.value) {
     if (stats.has(theme)) {
@@ -185,6 +193,15 @@ onMounted(async () => {
       stats.set(theme, 1);
     }
   }
+}
+
+onMounted(async () => {
+  await loadData();
+  const departments = await api.get(`/departments/`);
+  for (let code of departments.data) {
+    departements.value.set(code.Code_Department, code.themes[0].Title_Theme);
+  }
+  drawMap();
 });
 </script>
 
@@ -205,14 +222,14 @@ path {
   /* Largeur de la bordure */
 }
 
-/* Ajoutez des styles supplémentaires au survol si nécessaire */
+/* Ajoutez des styles supplementaires au survol si necessaire */
 path:hover {
   fill: #8cbf8c;
   /* Nouvelle couleur de remplissage au survol */
 }
 
 /* Maths */
-.Maths {
+.Math {
   fill: #fa8072;
 }
 
@@ -257,7 +274,7 @@ path:hover {
 }
 
 /* Films-et-series */
-.Films-et-series {
+.Films.et.series {
   fill: #d8bfd8;
 }
 </style>

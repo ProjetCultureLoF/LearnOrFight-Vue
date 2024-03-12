@@ -10,16 +10,14 @@
       @apply font-oswald font-semibold  ;
     }
     h1 {
-      @apply text-5xl font-extrabold;
+      @apply xs:text-xl md:text-5xl font-extrabold;
     }
     h2 {
-      @apply text-4xl font-bold;
+      @apply xs:text-lg md:text-4xl font-bold;
     }
+
     h3 {
-        @apply text-3xl;
-      }
-    h3 {
-        @apply text-2xl;
+        @apply xs:text-base md:text-2xl;
       }
     div {
         @apply bg-[#ffe5d0];
@@ -28,7 +26,7 @@
         @apply bg-[#BF6415] hover:bg-[#bf6415ec] rounded p-1 duration-200;
     }
     p{
-        @apply text-[#000000] text-xl font-normal;
+        @apply text-[#000000] md:text-xl xs:text-lg font-normal;
     }
     label{
       @apply text-3xl font-medium;
