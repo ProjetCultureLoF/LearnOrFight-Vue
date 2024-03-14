@@ -9,7 +9,7 @@
       >Créer quizz</router-link
     >
 
-    <nav class="">
+    <nav class="m-4">
       <ul v-if="!isConnected" class="flex gap-4">
         <a href="#" @click="showLogin = true" class="text-white"
           >Se connecter</a
@@ -59,7 +59,7 @@
   </div>
   <transition name="fade">
     <div
-      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-3 shadow-lg rounded-lg w-2/5 min-w-max h-fill flex flex-col text-center items-center z-50 gap-7"
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-3 pb-8 shadow-lg rounded-lg w-2/6 min-w-max h-fill flex flex-col text-center items-center z-50 gap-7"
       v-if="showLogin"
     >
       <img
@@ -175,6 +175,7 @@ export default {
           .get(`/users/?Token_User=${token.value}`)
           .then((response) => {
             if (response.data.length > 0) {
+              console.log("Utilisateur: ", response.data);
               accountName.value = response.data[0]["Name_User"];
               isConnected.value = true;
               isAdmin.value = response.data[0]["isAdmin"];
@@ -215,7 +216,7 @@ export default {
 
       api
         .post(
-          `/users/${username.value}/${mail.value}/${hashedPassword}/${tokenValue}/1/1`
+          `/users/${username.value}/${mail.value}/${hashedPassword}/${tokenValue}/1/2`
         )
         .then(() => {
           Cookies.set("token", tokenValue, { expires: 7 });
