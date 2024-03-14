@@ -38,13 +38,6 @@ const User = db.define("user", {
   isAdmin: {
     type: Sequelize.BOOLEAN,
   },
-  ClanId: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: "clans", // nom de la table
-      key: "ID_Clan",
-    },
-  },
 });
 
 User.belongsTo(Clan);

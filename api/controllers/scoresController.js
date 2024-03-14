@@ -26,11 +26,17 @@ async function getAll(req, res) {
         {
           model: User,
           attributes: ["Name_User"],
+          nest: true,
         },
       ],
     });
+    const modifiedScores = scores.map((score) => ({
+      userIDUser: score.userIDUser,
+      maxScore: score.dataValues.maxScore,
+      Name_User: score.user.Name_User,
+    }));
 
-    res.status(200).json(scores);
+    res.status(200).json(modifiedScores);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);

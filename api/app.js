@@ -48,7 +48,7 @@ app.use("/api/v1/themeQuiz", themeQuizRoute);
 
 // randomize.randomizeAllThemes();
 
-db.sync({})
+db.sync({ force: false })
   .then(() => {
     app.listen(port, () => {
       console.log(`Le serveur est bien lancé sur http://localhost:${port}`);
