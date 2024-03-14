@@ -32,7 +32,7 @@
       @apply text-3xl font-medium;
     }
     input{
-      @apply border-b-2 bg-transparent text-black h-8 active:border-b-4;
+      @apply border-b-2 bg-[#ffe5d0] text-black h-8 active:border-b-4;
     }
 
     ::placeholder{
