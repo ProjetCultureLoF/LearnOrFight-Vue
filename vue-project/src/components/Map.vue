@@ -27,21 +27,16 @@ async function loadData() {
 }
 
 const width = computed(() => {
-  console.log;
-  let width = null;
+  let width = window.innerWidth;
+
   if (window.innerWidth < 600) {
     return Math.round(window.innerWidth / 1.2);
-  } else if (window.innerWidth > 1200) {
+  } else if (600 <= window.innerWidth >= 1200) {
+    return Math.round(window.innerWidth / 2.5);
+  } else {
     return Math.round(window.innerWidth / 3);
   }
 });
-
-watch(
-  () => window.innerWidth,
-  ([newWidth]) => {
-    projection.fitSize([newWidth, newWidth], dataFrance.value);
-  }
-);
 
 const departements = ref(new Map());
 const codeDepartements = ref([
@@ -166,9 +161,11 @@ async function drawMap() {
     .append("svg")
     .attr("width", width.value)
     .attr("height", width.value);
+
   const projection = d3
     .geoMercator()
     .fitSize([width.value, width.value], dataFrance.value);
+
   const path = d3.geoPath().projection(projection); // // Ajouter les departements à la carte
   svg
     .selectAll("path")
