@@ -1,22 +1,32 @@
 <template>
-  <div class="relative overflow-x-auto rounded-lg md:w-1/5">
+  <div class="relative overflow-x-auto rounded-lg w-1/5">
     <table class="w-full text-sm text-left rtl:text-right text-black">
       <thead class="text-xs text-white uppercase bg-[#a76a30]">
         <tr>
-          <th scope="col" class="px-6 py-3 xs:text-xs">N°</th>
-          <th scope="col" class="px-6 py-3 xs:text-xs">Pseudo</th>
-          <th scope="col" class="px-6 py-3 xs:text-xs">Total de points</th>
+          <th
+            v-for="header in headers"
+            :key="header.key"
+            scope="col"
+            class="px-6 py-3 xs:text-xs"
+          >
+            {{ header.label }}
+          </th>
         </tr>
       </thead>
+
       <tbody>
         <tr
-          class="bg-white border-b border-[#a76a30]"
-          v-for="(score, index) in listScore"
+          v-for="(item, index) in listScore"
           :key="index"
+          class="bg-white border-b border-[#a76a30]"
         >
-          <td class="px-6 py-4 xs:text-xs">{{ index + 1 }}</td>
-          <td class="px-6 py-4 xs:text-xs">{{ score.user.Name_User }}</td>
-          <td class="px-6 py-4 xs:text-xs">{{ score.maxScore }}</td>
+          <td
+            v-for="(header, headerIndex) in headers"
+            :key="headerIndex"
+            class="px-6 py-4 xs:text-xs"
+          >
+            {{ headerIndex == 0 ? index + 1 : item[header.key] }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -24,7 +34,16 @@
 </template>
 
 <script setup>
+import { defineProps, watch } from "vue";
 const props = defineProps({
-  listScore: Array,
+  headers: {
+    type: Array,
+    required: true,
+  },
+  listScore: {
+    type: Array,
+    required: true,
+    default: [],
+  },
 });
 </script>
