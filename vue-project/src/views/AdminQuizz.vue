@@ -8,6 +8,7 @@
         :key="index"
         :quiz="quiz"
         :admin="true"
+        @modify="changeAnswer"
       >
         <button
           @click="deleteQuiz(quiz.ID_Quiz)"
@@ -32,6 +33,7 @@
       <input
         type="radio"
         name="goodAnswer"
+        class="shadow-none"
         :value="0"
         v-model="goodAnswer"
         checked
@@ -47,6 +49,7 @@
       <input
         type="radio"
         name="goodAnswer"
+        class="shadow-none"
         :value="1"
         v-model="goodAnswer"
         @click="goodAnswer = 1"
@@ -61,6 +64,7 @@
       <input
         type="radio"
         name="goodAnswer"
+        class="shadow-none"
         :value="2"
         v-model="goodAnswer"
         @click="goodAnswer = 2"
@@ -75,6 +79,7 @@
       <input
         type="radio"
         name="goodAnswer"
+        class="shadow-none"
         :value="3"
         v-model="goodAnswer"
         @click="goodAnswer = 3"
@@ -137,6 +142,11 @@ onBeforeMount(async () => {
   await getQuizes();
   await getThemes();
 });
+
+async function changeAnswer(answer, quiz, goodAnswer) {
+  api.patch(`/quizAnswers/${quiz.ID_Quiz}/${answer.ID_Answer}/1`);
+  api.patch(`/quizAnswers/${quiz.ID_Quiz}/${goodAnswer.ID_Answer}/0`);
+}
 
 async function deleteQuiz(quizId) {
   try {
