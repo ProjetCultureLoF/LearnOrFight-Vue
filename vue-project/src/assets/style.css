@@ -10,7 +10,7 @@
       @apply font-oswald font-semibold  ;
     }
     h1 {
-      @apply xs:text-xl md:text-5xl font-extrabold;
+      @apply xs:text-xl md:text-4xl font-extrabold;
     }
     h2 {
       @apply xs:text-lg md:text-4xl font-bold;
@@ -32,10 +32,15 @@
       @apply text-3xl font-medium;
     }
     input{
-      @apply border-b-2 bg-[#ffe5d0] text-black h-8 active:border-b-4;
+      @apply border-b-2 bg-[#ffe5d0] text-black h-8 active:border-b-4 shadow p-5 pr-0 w-fit;
+
     }
 
     ::placeholder{
       @apply italic
+    }
+
+    a{
+      @apply text-lg 
     }
   }
