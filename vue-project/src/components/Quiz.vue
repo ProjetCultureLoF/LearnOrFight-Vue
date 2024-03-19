@@ -19,9 +19,6 @@
         :goodAnswer="goodAnswer"
         @selectAnswer="selectAnswer"
       >
-        <button v-if="admin" class="duration-200 rounded-md p-2">
-          Modifier
-        </button>
       </Answers>
     </div>
   </div>
@@ -42,6 +39,13 @@
     </button>
     <p v-if="errorMessages != ''">{{ errorMessages }}</p>
   </div>
+  <button
+    v-if="admin"
+    class="duration-200 rounded-md p-4 text-xs lg:text-2xl shadow"
+    @click="$emit('modify', selectedAnswer, quiz, goodAnswer)"
+  >
+    Changer réponse
+  </button>
 </template>
 
 <script setup>
@@ -49,7 +53,7 @@ import Answers from "./Answers.vue";
 import { api } from "@/plugins/requete";
 import { ref, watch } from "vue";
 
-const emit = defineEmits(["validate", "nextQuestion"]);
+const emit = defineEmits(["validate", "nextQuestion", "modify"]);
 
 const props = defineProps({
   quiz: Object,
