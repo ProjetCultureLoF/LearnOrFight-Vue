@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-x-auto rounded-lg w-1/5">
+  <div class="relative overflow-x-auto rounded-lg w-4/5 max-w-[750px]">
     <table class="w-full text-sm text-left rtl:text-right text-black">
       <thead class="text-xs text-white uppercase bg-[#a76a30]">
         <tr>
@@ -14,7 +14,7 @@
         </tr>
       </thead>
 
-      <tbody>
+      <tbody v-if="listScore != false">
         <tr
           v-for="(item, index) in listScore"
           :key="index"
@@ -26,6 +26,20 @@
             class="px-6 py-4 xs:text-xs"
           >
             {{ headerIndex == 0 ? index + 1 : item[header.key] }}
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody v-else>
+        <tr class="bg-white border-b border-[#a76a30]">
+          <td class="px-6 py-4 xs:text-xs">/</td>
+          <td class="px-6 py-4 xs:text-xs">Pas de score</td>
+          <td
+            class="px-6 py-4 xs:text-xs"
+            v-for="i in headers.length - 2"
+            :key="i"
+          >
+            /
           </td>
         </tr>
       </tbody>
@@ -46,4 +60,6 @@ const props = defineProps({
     default: [],
   },
 });
+
+console.log(props.listScore);
 </script>
