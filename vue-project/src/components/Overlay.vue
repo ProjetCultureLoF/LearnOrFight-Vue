@@ -1,18 +1,6 @@
 <template>
-  <div id="overlay"></div>
+  <div
+    id="overlay"
+    class="flex w-full h-full bg-opacity-70 bg-black absolute top-0 z-10 items-center justify-center content-center"
+  ></div>
 </template>
-
-<style scoped>
-#overlay {
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.77);
-  position: absolute;
-  box-sizing: border-box;
-  z-index: 10;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-</style>
