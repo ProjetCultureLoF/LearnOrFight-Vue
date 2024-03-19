@@ -1,33 +1,34 @@
 <template>
-  <div
-    class="flex flex-row items-center justify-center text-center gap-10 mt-10"
-  >
-    <ScoreBoard :listScore="userScores" :headers="headers" />
+  <Verify
+    v-if="showOverlay"
+    :userData="userData"
+    @validate="changeUserData"
+    @close="showOverlay = falsea"
+  />
+
+  <div class="flex flex-row justify-center text-center mt-10">
+    <ScoreBoard :listScore="userScores" :headers="headers" class="m-6" />
 
     <div
-      class="flex flex-col items-center justify-center w-2/3 h-fit bg-white rounded gap-4 p-3"
+      class="flex flex-col items-center justify-center w-2/5 h-fit bg-white rounded gap-4 p-3 m-6 shadow-md"
     >
       <h1>Mon compte</h1>
       <div
         class="flex flex-row w-1/2 items-center justify-center gap-5 bg-white"
       >
         <input type="text" v-model="username" />
-        <button @click="changeUserData(username, 'Name_User')">Modifier</button>
       </div>
       <div
         class="flex flex-row w-1/2 items-center justify-center gap-5 bg-white"
       >
         <input type="text" v-model="mail" />
-        <button @click="changeUserData(mail, 'Mail_User')">Modifier</button>
       </div>
       <div
         class="flex flex-row w-1/2 items-center justify-center gap-5 bg-white"
       >
         <input type="text" v-model="newPassword" placeholder="*********" />
-        <button @click="changeUserData(newPassword, 'Password_User')">
-          Modifier
-        </button>
       </div>
+      <button @click="validate">Modifier</button>
     </div>
   </div>
 </template>
@@ -36,10 +37,14 @@
 import { onMounted, ref, computed } from "vue";
 import { api } from "@/plugins/requete.js";
 import ScoreBoard from "@/components/ScoreBoard.vue";
+import Verify from "@/components/Verify.vue";
 import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 
 const userData = ref(null);
-const userScores = ref(null);
+const userScores = ref([]);
+const clanListScore = ref([]);
+
 const headers = ref([
   { key: "index", label: "N°" },
   { key: "User_Score", label: "Points" },
@@ -48,6 +53,9 @@ const headers = ref([
 const newPassword = ref("");
 const mail = ref("");
 const username = ref("");
+const request = ref(null);
+
+const showOverlay = ref(false);
 
 async function getUserData() {
   const response = await api.get(`/users/?Token_User=${Cookies.get("token")}`);
@@ -60,10 +68,36 @@ async function getUserScores(ID_User) {
   return response.data;
 }
 
-async function changeUserData(value, key) {
-  const response = await api.patch(
-    `/users/${userData.value.ID_User}/?${key}=${value}`
-  );
+function validate() {
+  request.value = `/users/${userData.value.ID_User}/`;
+  if (username.value != userData.value.Name_User) {
+    request.value += `?Name_User=${username.value}&`;
+  }
+  if (mail.value != userData.value.Mail_User) {
+    if (request[-1] == "&") {
+      request.value += `Mail_User=${mail.value}&`;
+    } else {
+      request.value += `?Mail_User=${mail.value}&`;
+    }
+  }
+  if (newPassword.value != "") {
+    const password = CryptoJS.AES.encrypt(
+      newPassword.value,
+      "secretkey"
+    ).toString();
+    if (request[-1] == "&") {
+      request.value += `Password_User=${password}`;
+    } else {
+      request.value += `?Password_User=${password}`;
+    }
+  }
+  showOverlay.value = true;
+}
+
+async function changeUserData() {
+  const response = await api.patch(request.value);
+  showOverlay.value = false;
+  request.value = null;
 }
 
 onMounted(async () => {
