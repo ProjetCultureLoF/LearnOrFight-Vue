@@ -3,9 +3,26 @@ const Sequelize = require("sequelize");
 
 async function getAll(req, res) {
   try {
-    const { departmentIDDepartment, userIDUser, ID_Score } = req.query;
+    let { departmentIDDepartment, userIDUser, ID_Score, limit, offset, sort } =
+      req.query;
     const where = {};
-
+    let max = 0;
+    let min = 0;
+    if (limit) {
+      max = limit;
+    } else {
+      max = 10;
+    }
+    if (offset) {
+      min = offset;
+    } else {
+      min = 0;
+    }
+    if (sort && (sort.toUpperCase() == "ASC" || sort.toUpperCase() == "DESC")) {
+      sort = sort.toUpperCase();
+    } else {
+      sort = "ASC";
+    }
     if (departmentIDDepartment) {
       where.departmentIDDepartment = departmentIDDepartment;
     }
@@ -17,6 +34,8 @@ async function getAll(req, res) {
     }
 
     const scores = await Score.findAll({
+      limit: max,
+      offset: min,
       attributes: [
         "userIDUser",
         [Sequelize.fn("MAX", Sequelize.col("User_Score")), "maxScore"],
