@@ -18,7 +18,7 @@
         goodAnswer !== null &&
         goodAnswer.ID_Answer === answer.ID_Answer,
     }"
-    class="w-[20vw] lg:w-[23vw] border-t border-l border-r-4 border-b-4 rounded-md shadow duration-200 p-1 lg:p-2 hover:shadow-lg active:w-[24vw]"
+    class="w-[20vw] lg:w-[23vw] border-t border-l border-r-4 border-b-4 rounded-md shadow duration-200 p-1 lg:p-2 hover:shadow-lg active:w-[24vw] md:active:w-[22vw]"
   >
     <p
       :class="{ 'text-[#f4b44e]': selectedAnswer === answer }"
@@ -46,7 +46,6 @@ function selectAnswer(answer) {
   if (answer == props.selectedAnswer) {
     answer = null;
   }
-
   emit("selectAnswer", answer);
 }
 </script>
