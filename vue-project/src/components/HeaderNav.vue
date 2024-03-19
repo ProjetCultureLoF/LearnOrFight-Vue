@@ -39,13 +39,6 @@
             </li>
             <li>
               <router-link
-                to="/leaderboard"
-                class="dropdown-text block px-4 py-3 text-red-100 duration-100 hover:font-bold hover:shadow"
-                >Leaderboard</router-link
-              >
-            </li>
-            <li>
-              <router-link
                 to="/"
                 @click="logout"
                 class="dropdown-text rounded-md block px-4 py-3 text-red-100 duration-100 hover:font-bold hover:shadow"
@@ -65,6 +58,7 @@
       <img
         src="/src/assets/icons/clair.png"
         class="self-end w-8 hover:w-10 duration-200"
+        style="cursor: pointer"
         @click="close"
       />
       <h2>On s'est déjà vu?</h2>
