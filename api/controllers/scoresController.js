@@ -3,8 +3,15 @@ const Sequelize = require("sequelize");
 
 async function getAll(req, res) {
   try {
-    let { departmentIDDepartment, userIDUser, ID_Score, limit, offset, sort } =
-      req.query;
+    let {
+      departmentIDDepartment,
+      userIDUser,
+      ID_Score,
+      clanIDClan,
+      limit,
+      offset,
+      sort,
+    } = req.query;
     const where = {};
     let max = 0;
     let min = 0;
@@ -45,6 +52,12 @@ async function getAll(req, res) {
         {
           model: User,
           attributes: ["Name_User"],
+          where: { clanIDClan },
+          nest: true,
+        },
+        {
+          model: Department,
+          attributes: ["Name_Department"],
           nest: true,
         },
       ],
@@ -53,6 +66,7 @@ async function getAll(req, res) {
       userIDUser: score.userIDUser,
       maxScore: score.dataValues.maxScore,
       Name_User: score.user.Name_User,
+      Name_Department: score.department.Name_Department,
     }));
 
     res.status(200).json(modifiedScores);
@@ -65,9 +79,31 @@ async function getAll(req, res) {
 async function getUserScores(req, res) {
   try {
     const { userId } = req.params;
-    const scores = await Score.findAll({ where: { userIDUser: userId } });
+    const scores = await Score.findAll({
+      where: { userIDUser: userId },
+      include: [
+        {
+          model: User,
+          attributes: ["Name_User"],
+          nest: true,
+        },
+        {
+          model: Department,
+          nest: true,
+          include: ["themes"],
+        },
+      ],
+    });
 
-    res.status(200).json(scores);
+    const modifiedScores = scores.map((score) => ({
+      userIDUser: score.userIDUser,
+      User_Score: score.dataValues.User_Score,
+      Name_User: score.user.Name_User,
+      Name_Department: score.department.Name_Department,
+      Theme_Department: score.department.themes[0].Title_Theme,
+    }));
+
+    res.status(200).json(modifiedScores);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);

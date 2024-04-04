@@ -1,5 +1,6 @@
 const { Theme, Department } = require("./models/game/themeModel");
-
+const { DepartmentQuiz } = require("./models/game/departmentQuizModel");
+const { Quiz } = require("./models/game/quizModel");
 async function randomizeAllThemes() {
   const themes = await Theme.findAll();
   const departements = await Department.findAll();
@@ -141,4 +142,48 @@ async function putDepartment() {
   }
 }
 
-module.exports = { randomizeAllThemes, putDepartment, createTheme };
+async function randomizeDepartmentQuiz() {
+  await DepartmentQuiz.truncate();
+  const themes = await Theme.findAll();
+
+  // console.log("Themes: ", JSON.stringify(themes));
+
+  for (const theme of themes) {
+    const Title_Theme = theme.Title_Theme;
+
+    // console.log("Titre: ", Title_Theme);
+
+    const departments = await Department.findAll({
+      include: { model: Theme, where: { Title_Theme } },
+    });
+
+    if (Title_Theme == "Math") {
+      for (const department of departments) {
+        const quizzes = await Quiz.findAll({
+          include: { model: Theme, where: { Title_Theme } },
+        });
+
+        for (let i = 0; i < 4; i++) {
+          let j = Math.floor(Math.random() * quizzes.length);
+          const departmentQuiz = await DepartmentQuiz.create({
+            departmentIDDepartment: department.ID_Department,
+            quizIDQuiz: quizzes[j].ID_Quiz,
+          });
+
+          quizzes[j].Used_Quiz = true;
+          await departmentQuiz.save();
+          await quizzes[j].save();
+          quizzes.splice(j, 1);
+          console.log(j);
+        }
+      }
+    }
+    // console.log("Departement: ", JSON.stringify(departments));
+  }
+}
+module.exports = {
+  randomizeAllThemes,
+  putDepartment,
+  createTheme,
+  randomizeDepartmentQuiz,
+};

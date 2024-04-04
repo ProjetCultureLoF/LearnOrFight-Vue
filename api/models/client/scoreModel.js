@@ -20,4 +20,7 @@ Department.belongsToMany(User, { through: Score });
 User.hasMany(Score);
 Score.belongsTo(User);
 
+Department.hasMany(Score);
+Score.belongsTo(Department);
+
 module.exports = { db, Score, User, Department };

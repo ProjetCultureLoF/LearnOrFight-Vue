@@ -13,6 +13,8 @@ const quizRoute = require("./routes/quizRoute");
 const answerRoute = require("./routes/answerRoute");
 const quizAnswersRoute = require("./routes/quizAnswersRoute");
 const themeQuizRoute = require("./routes/themeQuizRoute");
+const departmentQuizzesRoute = require("./routes/departmentQuizzesRoute");
+
 const randomize = require("./randomize");
 
 const port = 3001;
@@ -41,12 +43,15 @@ app.use("/api/v1/quiz", quizRoute);
 app.use("/api/v1/answers", answerRoute);
 app.use("/api/v1/quizAnswers", quizAnswersRoute);
 app.use("/api/v1/themeQuiz", themeQuizRoute);
+app.use("/api/v1/departmentQuizzes", departmentQuizzesRoute);
 
-// randomize.createTheme();
+//randomize.createTheme();
 
-// randomize.putDepartment();
+//randomize.putDepartment();
 
-// randomize.randomizeAllThemes();
+//randomize.randomizeAllThemes();
+
+//randomize.randomizeDepartmentQuiz();
 
 db.sync({ force: false })
   .then(() => {

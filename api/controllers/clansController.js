@@ -5,7 +5,10 @@ const { Score } = require("../models/client/scoreModel");
 async function getById(req, res) {
   try {
     const { id } = req.params;
-    const clan = await Clan.findOne({ where: { ID_Clan: id } });
+    const clan = await Clan.findOne({
+      where: { ID_Clan: id },
+      include: { model: User, where: { clanIDClan: id } },
+    });
 
     res.status(200).json(clan);
   } catch (error) {
@@ -24,7 +27,10 @@ async function getAll(req, res) {
     if (Title_Clan) {
       where.Title_Clan = Title_Clan;
     }
-    const clans = await Clan.findAll({ where });
+    const clans = await Clan.findAll({
+      where,
+      include: { model: User, attributes: ["Name_User"] },
+    });
 
     res.status(200).json(clans);
   } catch (error) {
@@ -63,7 +69,7 @@ async function getClansScores(req, res) {
         totalScore,
       };
     });
-
+    clansWithScores.sort((a, b) => b.totalScore - a.totalScore);
     res.status(200).json(clansWithScores);
   } catch (error) {
     console.log(error);
@@ -94,7 +100,7 @@ async function patchClan(req, res) {
     if (Title_Clan) {
       criteria.Title_Clan = Title_Clan;
     }
-    const clan = await Clan.update({ criteria, where: { ID_Clan: id } });
+    const clan = await Clan.update(criteria, { where: { ID_Clan: id } });
 
     res.status(200).json(clan);
   } catch (error) {
