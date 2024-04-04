@@ -1,13 +1,18 @@
 <template>
   <Verify
     v-if="showOverlay"
-    :userData="userData"
+    :warning="''"
     @validate="changeUserData"
     @close="showOverlay = falsea"
   />
 
   <div class="flex flex-row justify-center text-center mt-10">
-    <ScoreBoard :listScore="userScores" :headers="headers" class="m-6" />
+    <ScoreBoard
+      :listScore="userScores"
+      :title="'Vos scores'"
+      :headers="headers"
+      class="m-6"
+    />
 
     <div
       class="flex flex-col items-center justify-center w-2/5 h-fit bg-white rounded gap-4 p-3 m-6 shadow-md"
@@ -48,6 +53,8 @@ const clanListScore = ref([]);
 const headers = ref([
   { key: "index", label: "N°" },
   { key: "User_Score", label: "Points" },
+  { key: "Name_Department", label: "Département" },
+  { key: "Theme_Department", label: "Thème" },
 ]);
 
 const newPassword = ref("");
@@ -94,7 +101,7 @@ function validate() {
   showOverlay.value = true;
 }
 
-async function changeUserData() {
+async function changeUserData(ID_User) {
   const response = await api.patch(request.value);
   showOverlay.value = false;
   request.value = null;
