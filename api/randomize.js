@@ -1,6 +1,10 @@
 const { Theme, Department } = require("./models/game/themeModel");
 const { DepartmentQuiz } = require("./models/game/departmentQuizModel");
+const { UserAnswer } = require("./models/game/userAnswerModel");
+
 const { Quiz } = require("./models/game/quizModel");
+const { Score } = require("./models/client/scoreModel");
+
 async function randomizeAllThemes() {
   const themes = await Theme.findAll();
   const departements = await Department.findAll();
@@ -144,6 +148,8 @@ async function putDepartment() {
 
 async function randomizeDepartmentQuiz() {
   await DepartmentQuiz.truncate();
+  await UserAnswer.truncate();
+
   const themes = await Theme.findAll();
 
   // console.log("Themes: ", JSON.stringify(themes));
@@ -181,9 +187,14 @@ async function randomizeDepartmentQuiz() {
     // console.log("Departement: ", JSON.stringify(departments));
   }
 }
+async function deleteScores() {
+  Score.truncate();
+}
+
 module.exports = {
   randomizeAllThemes,
   putDepartment,
   createTheme,
   randomizeDepartmentQuiz,
+  deleteScores,
 };

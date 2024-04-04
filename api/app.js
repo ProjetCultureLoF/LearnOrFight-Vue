@@ -14,6 +14,7 @@ const answerRoute = require("./routes/answerRoute");
 const quizAnswersRoute = require("./routes/quizAnswersRoute");
 const themeQuizRoute = require("./routes/themeQuizRoute");
 const departmentQuizzesRoute = require("./routes/departmentQuizzesRoute");
+const userAnswersRoute = require("./routes/userAnswersRoute");
 
 const randomize = require("./randomize");
 
@@ -44,6 +45,7 @@ app.use("/api/v1/answers", answerRoute);
 app.use("/api/v1/quizAnswers", quizAnswersRoute);
 app.use("/api/v1/themeQuiz", themeQuizRoute);
 app.use("/api/v1/departmentQuizzes", departmentQuizzesRoute);
+app.use("/api/v1/userAnswers", userAnswersRoute);
 
 //randomize.createTheme();
 
