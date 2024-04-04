@@ -113,8 +113,10 @@ watch(
         time.value--;
       }, 1000);
     }
-    if (count == 0) {
+    if (count == 0 && selectedAnswer.value == null) {
       isAnswer({ ID_Answer: 0 });
+    } else if (count == 0) {
+      isAnswer(selectedAnswer.value);
     }
   },
   {
