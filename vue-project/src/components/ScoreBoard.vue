@@ -1,5 +1,8 @@
 <template>
-  <div class="relative overflow-x-auto rounded-lg w-4/5 max-w-[750px]">
+  <div
+    class="relative overflow-x-auto rounded-lg w-4/5 max-w-[750px] text-center"
+  >
+    <h2 class="m-4">{{ title }}</h2>
     <table class="w-full text-sm text-left rtl:text-right text-black">
       <thead class="text-xs text-white uppercase bg-[#a76a30]">
         <tr>
@@ -58,6 +61,11 @@ const props = defineProps({
     type: Array,
     required: true,
     default: [],
+  },
+  title: {
+    type: String,
+    required: true,
+    default: "",
   },
 });
 

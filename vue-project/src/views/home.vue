@@ -1,31 +1,40 @@
 <template>
   <div
     id="home"
-    class="flex sm:flex-col md:flex-row flex-wrap justify-center pt-16"
+    class="flex w-full place-self-center sm:flex-col md:flex-row flex-wrap items-center justify-center min-h-[80vh] pt-16"
   >
     <Map v-if="isLogged" class="m-6" />
-    <div class="flex flex-col w-full md:w-1/2 items-center">
+    <div class="flex flex-col w-full md:w-1/2">
       <ScoreBoard
         :headers="playerHeaders"
         :listScore="playerListScore"
-        class="m-6"
+        :title="'Meilleurs joueurs'"
+        class="m-6 self-center"
       />
-      <button v-if="offset > 0" @click="lastList" class="bg-transparent">
-        Arrière
-      </button>
-
       <button
         v-if="playerListScore.length > 0"
         @click="nextList"
-        class="bg-transparent"
+        class="hover:bg-transparent bg-transparent w-fit relative left-[55%]"
       >
-        Avant
+        <img src="/src/assets/icons/after.png" alt="" class="w-6" />
       </button>
+      <button
+        v-if="offset > 0"
+        @click="lastList"
+        class="hover:bg-transparent bg-transparent w-fit relative left-[40%]"
+      >
+        <img
+          src="/src/assets/icons/before.png"
+          alt=""
+          class="w-6 duration-200"
+        />
+      </button>
+
       <ScoreBoard
-        v-if="isLogged"
         :headers="clanHeaders"
         :listScore="clanListScore"
-        class="m-6 order-last"
+        :title="'Meilleurs clans'"
+        class="m-6 order-last self-center"
       />
     </div>
   </div>
@@ -35,7 +44,6 @@
 import Map from "@/components/Map.vue";
 import ScoreBoard from "@/components/ScoreBoard.vue";
 import { ref, inject, computed, onMounted } from "vue";
-import Clans from "@/components/Clans.vue";
 import { api } from "@/plugins/requete";
 
 const isLoggedRef = inject("isLogged");

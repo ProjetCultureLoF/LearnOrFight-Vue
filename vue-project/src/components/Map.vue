@@ -31,7 +31,7 @@ const width = computed(() => {
 
   if (window.innerWidth < 600) {
     return Math.round(window.innerWidth / 1.2);
-  } else if (600 <= window.innerWidth >= 1200) {
+  } else if (600 <= window.innerWidth >= 1000) {
     return Math.round(window.innerWidth / 2.5);
   } else {
     return Math.round(window.innerWidth / 3);
