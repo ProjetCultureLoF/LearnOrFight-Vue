@@ -5,6 +5,9 @@
     <router-link to="/" class="mt-2">
       <img class="h-20" src="/src/assets/logo/lof-logo.png" alt="Logo" />
     </router-link>
+    <router-link to="/clans" v-if="isAdmin" class="text-white"
+      >Clans</router-link
+    >
     <router-link to="/admin" v-if="isAdmin" class="text-white"
       >Créer quizz</router-link
     >
@@ -81,7 +84,8 @@
             placeholder="Mot de passe"
           />
         </div>
-        <div v-if="loginError" class="error-message">{{ loginError }}</div>
+        <p v-if="loginError" class="break-all">{{ loginError }}</p>
+
         <button class="bg-[#a76a30]" @click="logginUser" type="submit">
           Se connecter
         </button>
@@ -260,8 +264,7 @@ export default {
         })
         .catch((error) => {
           console.error(error);
-          loginError.value =
-            "Erreur lors de la tentative de connexion. Veuillez réessayer.";
+          loginError.value = "Erreur lors de la tentative de connexion.";
         });
     };
 
