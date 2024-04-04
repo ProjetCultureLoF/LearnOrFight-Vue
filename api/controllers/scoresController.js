@@ -12,7 +12,9 @@ async function getAll(req, res) {
       offset,
       sort,
     } = req.query;
+
     const where = {};
+
     let max = 0;
     let min = 0;
     if (limit) {
@@ -40,6 +42,25 @@ async function getAll(req, res) {
       where.ID_Score = ID_Score;
     }
 
+    const include = [
+      {
+        model: User,
+        attributes: ["Name_User"],
+        nest: true,
+      },
+      {
+        model: Department,
+        attributes: ["Name_Department"],
+        nest: true,
+      },
+    ];
+
+    if (clanIDClan) {
+      include[0].where = {
+        clanIDClan,
+      };
+    }
+
     const scores = await Score.findAll({
       limit: max,
       offset: min,
@@ -48,19 +69,7 @@ async function getAll(req, res) {
         [Sequelize.fn("MAX", Sequelize.col("User_Score")), "maxScore"],
       ],
       group: ["userIDUser"],
-      include: [
-        {
-          model: User,
-          attributes: ["Name_User"],
-          where: { clanIDClan },
-          nest: true,
-        },
-        {
-          model: Department,
-          attributes: ["Name_Department"],
-          nest: true,
-        },
-      ],
+      include,
     });
     const modifiedScores = scores.map((score) => ({
       userIDUser: score.userIDUser,
