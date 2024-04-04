@@ -1,6 +1,7 @@
 <template>
-  <div class="h-[100vh]">
+  <div class="min-h-screen">
     <HeaderNav @isConnectedChange="(newValue) => (sendIsLogged = newValue)" />
+
     <RouterView v-slot="{ Component }">
       <template v-if="Component">
         <KeepAlive>
@@ -13,8 +14,8 @@
           </Suspense>
         </KeepAlive>
       </template>
+      <Footer />
     </RouterView>
-    <Footer />
   </div>
 </template>
 
