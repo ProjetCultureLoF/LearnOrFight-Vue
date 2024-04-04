@@ -23,7 +23,7 @@
       class="flex flex-col justify-center items-center place-self-center mt-24 gap-8"
     >
       <Quiz
-        :quiz="quizes[currentQuiz]"
+        :quiz="quizes[currentQuiz].quiz"
         @validate="waitNextQuestion"
         @nextQuestion="nextQuestion"
         :waitNext="waitNext"
@@ -54,9 +54,27 @@ const isFinished = ref(false);
 const waitNext = ref(false);
 const score = ref(0);
 async function getQuizes() {
-  const response = await api.get(`quiz/byDepartment/used/${route.params.dep}`);
-  console.log(response.data);
-  quizes.value = response.data;
+  // const response = await api.get(`quiz/byDepartment/used/${route.params.dep}`);
+  const response2 = await api.get(
+    `departmentQuizzes/?Name_Department=${route.params.dep}`
+  );
+  console.log(response2.data);
+  // console.log(response.data);
+  // quizes.value = randomizeList(response.data);
+  quizes.value = response2.data;
+  console.log(quizes.value);
+}
+
+function randomizeList(arr) {
+  const newArray = [];
+
+  for (let i = 3; i > 0; i--) {
+    const j = Math.floor(Math.random() * arr.length);
+    newArray.push(arr[j]);
+    arr.splice(j, 1);
+  }
+  console.log("NewArray:", newArray);
+  return newArray;
 }
 
 function waitNextQuestion(answer) {
