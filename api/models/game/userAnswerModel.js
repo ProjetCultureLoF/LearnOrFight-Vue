@@ -1,7 +1,7 @@
 const { db } = require("../db");
 const Sequelize = require("sequelize");
 
-const { Answer } = require("./answerModel");
+const { Quiz } = require("./quizModel");
 const { User } = require("../client/userModel");
 
 const UserAnswer = db.define("userAnswer", {
@@ -15,12 +15,12 @@ const UserAnswer = db.define("userAnswer", {
   },
 });
 
-User.belongsToMany(Answer, { through: UserAnswer });
-Answer.belongsToMany(User, { through: UserAnswer });
+User.belongsToMany(Quiz, { through: UserAnswer });
+Quiz.belongsToMany(User, { through: UserAnswer });
 
 User.hasMany(UserAnswer);
 UserAnswer.belongsTo(User);
-Answer.hasMany(UserAnswer);
-UserAnswer.belongsTo(Answer);
+Quiz.hasMany(UserAnswer);
+UserAnswer.belongsTo(Quiz);
 
-module.exports = { db, Answer, User, UserAnswer };
+module.exports = { db, Quiz, User, UserAnswer };

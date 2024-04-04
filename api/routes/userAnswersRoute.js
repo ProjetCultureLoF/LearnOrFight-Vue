@@ -4,7 +4,7 @@ const userAnswerRouter = express.Router();
 
 const controller = require("../controllers/userAnswersController");
 
-userAnswerRouter.post("/:userId/:answerId/:answer", controller.addUserAnswer);
+userAnswerRouter.post("/:token/:quizId/:answer", controller.addUserAnswer);
 
 userAnswerRouter.get("/", controller.getAll);
 

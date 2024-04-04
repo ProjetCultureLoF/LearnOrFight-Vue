@@ -1,14 +1,20 @@
 const { UserAnswer } = require("../models/game/userAnswerModel");
 const { User } = require("../models/client/userModel");
-const { Answer } = require("../models/game/answerModel");
+const { Quiz } = require("../models/game/quizModel");
 
 async function addUserAnswer(req, res) {
   try {
-    const { userId, answerId, answer } = req.params;
+    const { token, quizId, answer } = req.params;
+
+    const user = await User.findOne({
+      where: {
+        Token_User: token,
+      },
+    });
 
     const userAnswer = await UserAnswer.create({
-      userIDUser: userId,
-      answerIDAnswer: answerId,
+      userIDUser: user.ID_User,
+      quizIDQuiz: quizId,
       Answer_UserAnswer: answer,
     });
 
@@ -21,7 +27,7 @@ async function addUserAnswer(req, res) {
 
 async function getAll(req, res) {
   try {
-    const { Answer, ID_User, Token_User, ID_Answer } = req.query;
+    const { Answer, ID_User, Token_User, ID_Quiz } = req.query;
     const where = {};
     if (Answer) {
       where.Answer_UserAnswer = Answer;
@@ -35,8 +41,8 @@ async function getAll(req, res) {
       });
       where.userIDUser = user.ID_User;
     }
-    if (ID_Answer) {
-      where.answerIDAnswer = ID_Answer;
+    if (ID_Quiz) {
+      where.quizIDQuiz = ID_Quiz;
     }
     const userAnswer = await UserAnswer.findAll({
       where,
@@ -52,15 +58,15 @@ async function getAll(req, res) {
 async function deleteUserAnswer(req, res) {
   try {
     const where = {};
-    const { ID_UserAnswer, ID_User, ID_Answer } = req.query;
-    if (Answer) {
-      where.Answer_UserAnswer = ID_UserAnswer;
+    const { ID_UserAnswer, ID_User, ID_Quiz } = req.query;
+    if (ID_UserAnswer) {
+      where.ID_UserAnswer = ID_UserAnswer;
     }
     if (ID_User) {
       where.userIDUser = ID_User;
     }
-    if (ID_Answer) {
-      where.answerIDAnswer = ID_Answer;
+    if (ID_Quiz) {
+      where.quizIDQuiz = ID_Quiz;
     }
     const userAnswer = await UserAnswer.destroy({
       where,

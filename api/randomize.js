@@ -149,7 +149,7 @@ async function putDepartment() {
 async function randomizeDepartmentQuiz() {
   await DepartmentQuiz.truncate();
   await UserAnswer.truncate();
-
+  //await Score.truncate();
   const themes = await Theme.findAll();
 
   // console.log("Themes: ", JSON.stringify(themes));
