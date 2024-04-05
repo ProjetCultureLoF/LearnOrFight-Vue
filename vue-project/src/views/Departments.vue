@@ -30,13 +30,18 @@
       >
       </Quiz>
     </div>
-    <Progress :list="quizes" :current="currentQuiz" :wasTrue="wasTrue" />
+    <Progress
+      :list="quizes"
+      :current="currentQuiz"
+      :listWasTrue="listWasTrue"
+    />
   </div>
 </template>
 
 <script setup>
 import Quiz from "@/components/Quiz.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, provide } from "vue";
+
 import { api } from "@/plugins/requete";
 import { useRoute } from "vue-router";
 import Progress from "@/components/Progress.vue";
@@ -53,39 +58,59 @@ const isFinished = ref(false);
 
 const waitNext = ref(false);
 const score = ref(0);
+
+const listWasTrue = ref([]);
+
 async function getQuizes() {
-  // const response = await api.get(`quiz/byDepartment/used/${route.params.dep}`);
-  const response2 = await api.get(
+  const response = await api.get(
     `departmentQuizzes/?Name_Department=${route.params.dep}`
   );
-  console.log(response2.data);
-  // console.log(response.data);
-  // quizes.value = randomizeList(response.data);
-  quizes.value = response2.data;
-  console.log(quizes.value);
-}
 
-function randomizeList(arr) {
-  const newArray = [];
+  quizes.value = response.data;
+  console.log("Liste de quizzes: ", quizes.value);
 
-  for (let i = 3; i > 0; i--) {
-    const j = Math.floor(Math.random() * arr.length);
-    newArray.push(arr[j]);
-    arr.splice(j, 1);
+  const response2 = await api.get(
+    `userAnswers/?Token_User=${Cookies.get("token")}`
+  );
+
+  console.log("Liste de quizzes répondus: ", response2.data);
+
+  if (response2.data.length > 0) {
+    listWasTrue.value = isQuizStarted(response2.data);
+    console.log("List Was True 79: ", listWasTrue);
   }
-  console.log("NewArray:", newArray);
-  return newArray;
 }
 
-function waitNextQuestion(answer) {
-  if (answer) {
+function isQuizStarted(quizList) {
+  console.log("Quiz Actuelle: ", quizes.value[currentQuiz.value]);
+  const tempWasTrueList = [];
+  quizList.forEach((quiz) => {
+    if (quiz.quizIDQuiz == quizes.value[currentQuiz.value].quiz.ID_Quiz) {
+      // console.log(quiz.Answer_UserAnswer);
+      tempWasTrueList.push(quiz.Answer_UserAnswer);
+      // wasTrue.value = quiz.Answer_UserAnswer;
+      currentQuiz.value++;
+      // isQuizStarted(quizList);
+    }
+    console.log("WasTrueList", tempWasTrueList);
+  });
+  return tempWasTrueList;
+}
+
+function waitNextQuestion(response) {
+  if (response) {
     goodAnswer.value += 1;
-    wasTrue.value = true;
   } else {
     badAnswer.value += 1;
-    wasTrue.value = false;
   }
 
+  wasTrue.value = response;
+  listWasTrue.value.push(response);
+  api.post(
+    `/userAnswers/${Cookies.get("token")}/${
+      quizes.value[currentQuiz.value].quiz.ID_Quiz
+    }/${response}`
+  );
   waitNext.value = true;
 }
 
