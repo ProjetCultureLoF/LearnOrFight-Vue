@@ -46,7 +46,11 @@
 <script setup>
 import Answers from "./Answers.vue";
 import { api } from "@/plugins/requete";
+import router from "@/router";
 import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const emit = defineEmits(["validate", "nextQuestion", "modify"]);
 
@@ -65,13 +69,9 @@ const props = defineProps({
 const selectedAnswer = ref(null);
 const errorMessages = ref("");
 const time = props.admin ? ref(0) : ref(30);
+const timer = ref(null);
 const goodAnswer = ref(null);
 
-function updateIsUsed() {
-  api.patch(
-    `/themeQuiz/${props.quiz.themeQuizzes[0].ID_ThemeQuiz}?Used_ThemeQuiz=${isUsed.value}`
-  );
-}
 function selectAnswer(answer) {
   console.log(answer);
 
@@ -85,14 +85,13 @@ async function isAnswer(answer) {
     );
 
     if (answer.ID_Answer == response.data[0].answer.ID_Answer) {
-      goodAnswer.value = response.data[0].answer;
-
       emit("validate", true);
     } else {
-      goodAnswer.value = response.data[0].answer;
-
       emit("validate", false);
     }
+
+    goodAnswer.value = response.data[0].answer;
+
     errorMessages.value = "";
   } else {
     errorMessages.value = "Vous devez selectionner une réponse";
@@ -108,7 +107,11 @@ function nextQuestion() {
 watch(
   () => time.value,
   (count) => {
-    if (count > 0 && props.waitNext == false) {
+    if (
+      count > 0 &&
+      props.waitNext == false &&
+      route.name.includes("departments")
+    ) {
       setTimeout(() => {
         time.value--;
       }, 1000);
