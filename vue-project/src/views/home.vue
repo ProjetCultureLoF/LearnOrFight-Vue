@@ -1,10 +1,10 @@
 <template>
   <div
     id="home"
-    class="flex w-full place-self-center sm:flex-col md:flex-row flex-wrap items-center justify-center min-h-[80vh] pt-16"
+    class="flex w-full sm:flex-col md:flex-row flex-wrap justify-center min-h-[80vh]"
   >
     <Map v-if="isLogged" class="m-6" />
-    <div class="flex flex-col w-full md:w-1/2">
+    <div class="flex flex-col w-full md:w-1/2 justify-center">
       <ScoreBoard
         :headers="playerHeaders"
         :listScore="playerListScore"
@@ -34,7 +34,7 @@
         :headers="clanHeaders"
         :listScore="clanListScore"
         :title="'Meilleurs clans'"
-        class="m-6 order-last self-center"
+        class="m-6 mb-10 order-last self-center"
       />
     </div>
   </div>
@@ -68,7 +68,7 @@ const clanHeaders = ref([
 ]);
 
 async function getScores() {
-  const response = await api.get(`/scores/?offset=${offset.value}`);
+  const response = await api.get(`/scores/?offset=${offset.value}&sort=DESC`);
   playerListScore.value = response.data;
   console.log(offset.value);
 }
