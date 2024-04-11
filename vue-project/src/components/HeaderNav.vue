@@ -12,7 +12,7 @@
     <router-link to="/clans" v-if="isConnected" class="text-white"
       >Clans</router-link
     >
-    <router-link to="/admin" v-if="isAdmin" class="text-white"
+    <router-link :to="'/admin/' + token" v-if="isAdmin" class="text-white"
       >Créer quizz</router-link
     >
 
@@ -172,7 +172,6 @@ import { api } from "@/plugins/requete.js";
 import Overlay from "@/components/Overlay.vue";
 import Clans from "@/components/Clans.vue";
 import { useRouter } from "vue-router";
-import router from "@/router";
 
 export default {
   components: { Overlay, Clans },

@@ -4,6 +4,7 @@ import Departments from "@/views/Departments.vue";
 import NotFound from "@/views/pageNotFound.vue";
 import Admin from "@/views/AdminQuizz.vue";
 import Clans from "@/views/ClansSelection.vue";
+import { api } from "@/plugins/requete.js";
 
 import Account from "./views/Account.vue";
 // import Leaderboard from './components/Leaderboard.vue';
@@ -23,9 +24,25 @@ export default createRouter({
       component: Departments,
     },
     {
-      path: "/admin",
+      path: "/admin/:token",
       name: "admin",
       component: Admin,
+      beforeEnter: (to, from, next) => {
+        const token = to.params.token;
+        api
+          .get(`/users/?Token_User=${token}`)
+          .then((response) => {
+            if (response.data[0].isAdmin == true) {
+              next();
+            } else {
+              next("/");
+            }
+          })
+          .catch((error) => {
+            console.error("Error checking admin status:", error);
+            next("/");
+          });
+      },
     },
     {
       path: "/account",
