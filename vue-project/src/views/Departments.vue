@@ -20,7 +20,7 @@
 
     <div
       v-else-if="quizes.length > 0"
-      class="flex flex-col justify-center items-center place-self-center mt-24 gap-8"
+      class="flex flex-col justify-center items-center place-self-center mt-24 gap-10"
     >
       <Quiz
         :quiz="quizes[currentQuiz].quiz"
