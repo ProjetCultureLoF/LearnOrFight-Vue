@@ -6,7 +6,9 @@
     @close="showOverlay = falsea"
   />
 
-  <div class="flex flex-row justify-center text-center mt-10">
+  <div
+    class="flex md:flex-row xs:flex-col justify-center lg:items-start xs:items-center text-center mt-10"
+  >
     <ScoreBoard
       :listScore="userScores"
       :title="'Vos scores'"
@@ -15,7 +17,7 @@
     />
 
     <div
-      class="flex flex-col items-center justify-center w-2/5 h-fit bg-white rounded gap-4 p-3 m-6 shadow-md"
+      class="flex flex-col items-center justify-center lg:w-2/5 xs:w-3/4 h-fit bg-white rounded gap-4 p-3 m-6 shadow-md"
     >
       <h1>Mon compte</h1>
       <div
