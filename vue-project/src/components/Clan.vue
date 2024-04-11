@@ -9,13 +9,13 @@
     id="clan"
     class="flex flex-col flex-wrap w-1/3 items-center justify-center gap-4"
   >
-    <h1>{{ clan.Title_Clan }}</h1>
+    <h1 class="">{{ clan.Title_Clan }}</h1>
     <img
       :src="`src/assets/logo/${clan.Title_Clan}.png`"
       alt=""
-      class="h-[15vh]"
+      class="h-[15vh] w-[15vh]"
     />
-    <button class="p-2" @click="showOverlay = true">Changer de clan</button>
+    <button class="p-2" @click="showOverlay = true">Choisir ce clan</button>
     <ScoreBoard
       :title="'Meilleurs joueurs'"
       :headers="headers"
