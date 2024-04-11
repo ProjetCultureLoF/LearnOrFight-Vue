@@ -37,7 +37,7 @@
 
 <script setup>
 import { ip } from "@/plugins/ip.js";
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { api } from "@/plugins/requete";
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 const dataFrance = ref("");
@@ -82,106 +82,15 @@ const width = computed(() => {
 });
 
 const departements = ref(new Map());
-// const codeDepartements = ref([
-//   "01",
-//   "02",
-//   "03",
-//   "04",
-//   "05",
-//   "06",
-//   "07",
-//   "08",
-//   "09",
-//   "10",
-//   "11",
-//   "12",
-//   "13",
-//   "14",
-//   "15",
-//   "16",
-//   "17",
-//   "18",
-//   "19",
-//   "21",
-//   "22",
-//   "23",
-//   "24",
-//   "25",
-//   "26",
-//   "27",
-//   "28",
-//   "29",
-//   "2A",
-//   "2B",
-//   "30",
-//   "31",
-//   "32",
-//   "33",
-//   "34",
-//   "35",
-//   "36",
-//   "37",
-//   "38",
-//   "39",
-//   "40",
-//   "41",
-//   "42",
-//   "43",
-//   "44",
-//   "45",
-//   "46",
-//   "47",
-//   "48",
-//   "49",
-//   "50",
-//   "51",
-//   "52",
-//   "53",
-//   "54",
-//   "55",
-//   "56",
-//   "57",
-//   "58",
-//   "59",
-//   "60",
-//   "61",
-//   "62",
-//   "63",
-//   "64",
-//   "65",
-//   "66",
-//   "67",
-//   "68",
-//   "69",
-//   "70",
-//   "71",
-//   "72",
-//   "73",
-//   "74",
-//   "75",
-//   "76",
-//   "77",
-//   "78",
-//   "79",
-//   "80",
-//   "81",
-//   "82",
-//   "83",
-//   "84",
-//   "85",
-//   "86",
-//   "87",
-//   "88",
-//   "89",
-//   "90",
-//   "91",
-//   "92",
-//   "93",
-//   "94",
-//   "95",
-// ]);
+let tooltip; // Déclaration de la variable tooltip
 
 async function drawMap() {
+  tooltip = d3
+    .select("#map") // Définition de la tooltip ici
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
   const svg = d3
     .select("#map")
     .append("svg")
@@ -192,19 +101,39 @@ async function drawMap() {
     .geoMercator()
     .fitSize([width.value, width.value], dataFrance.value);
 
-  const path = d3.geoPath().projection(projection); // // Ajouter les departements à la carte
+  const path = d3.geoPath().projection(projection);
+
   svg
     .selectAll("path")
     .data(dataFrance.value.features)
     .enter()
     .append("a")
-    .attr("href", (d) => `http://${ip}:5173/departments/${d.properties.nom}`)
+    .attr(
+      "href",
+      (d) =>
+        `http://${ip}:5173/departments/${d.properties.nom.replace(
+          /[êéè]/g,
+          "e"
+        )}`
+    )
     .append("path")
     .attr("d", path)
     .attr("class", (d) => departements.value.get(d.properties.code))
     .attr("stroke", "#666")
-    .attr("stroke-width", 1);
-  // Statistiques sur le nombre de departements par theme
+    .attr("stroke-width", 1)
+    .on("mouseover", (event, d) => {
+      tooltip.transition().duration(200).style("opacity", 0.9);
+      tooltip
+        .html(
+          d.properties.nom + " - " + departements.value.get(d.properties.code)
+        )
+        .style("left", event.pageX + 28 + "px")
+        .style("top", event.pageY - 28 + "px");
+    })
+    .on("mouseout", (d) => {
+      tooltip.style("opacity", 0);
+    });
+
   let stats = new Map();
   for (let theme of departements.value) {
     if (stats.has(theme)) {
@@ -296,5 +225,15 @@ path:hover {
 /* Films-et-series */
 .Films.et.series {
   fill: #d8bfd8;
+}
+
+/* Style de la tooltip */
+.tooltip {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  opacity: 0;
 }
 </style>
