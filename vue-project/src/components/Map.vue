@@ -122,7 +122,7 @@ async function drawMap() {
     .attr("stroke", "#666")
     .attr("stroke-width", 1)
     .on("mouseover", (event, d) => {
-      tooltip.transition().duration(200).style("opacity", 0.9);
+      tooltip.transition().duration(100).style("opacity", 0.9);
       tooltip
         .html(
           d.properties.nom + " - " + departements.value.get(d.properties.code)
