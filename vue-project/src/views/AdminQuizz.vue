@@ -1,10 +1,25 @@
 <template>
   <div class="flex flex-col gap-10 items-center text-center">
     <div
-      class="flex flex-col justify-center items-center place-self-center mt-24 gap-8"
+      class="flex flex-col flex-wrap justify-center items-center place-self-center mt-24 gap-8"
     >
+      <div class="flex flex-row gap-4 flex-wrap m-2 justify-center">
+        <input type="text" v-model="searchBar" />
+        <label for="type-rental">Theme:</label>
+        <select
+          name="Theme"
+          v-model="themesSearchValue"
+          class="bg-gray-100 rounded p-1"
+        >
+          <option v-for="theme in themes" :key="theme.ID_Theme">
+            {{ theme.Title_Theme }}
+          </option>
+        </select>
+        <button @click="reset">Réinitialiser</button>
+      </div>
+
       <Quiz
-        v-for="(quiz, index) in quizes"
+        v-for="(quiz, index) in sortedQuizes"
         :key="index"
         :quiz="quiz"
         :admin="true"
@@ -21,7 +36,7 @@
 
     <div
       id="quiz"
-      class="flex flex-wrap flex-row gap-2 text-center justify-center items-center m-8"
+      class="flex flex-wrap flex-col gap-2 text-center justify-center items-center m-8 mb-12"
     >
       <input
         type="text"
@@ -30,71 +45,80 @@
         class="bg-gray-100 rounded p-1"
       />
 
-      <input
-        type="radio"
-        name="goodAnswer"
-        class="shadow-none"
-        :value="0"
-        v-model="goodAnswer"
-        checked
-        @click="goodAnswer = 0"
-      />
-      <input
-        type="text"
-        v-model="a1"
-        placeholder="Question N°1"
-        class="bg-gray-100 rounded p-1"
-      />
-
-      <input
-        type="radio"
-        name="goodAnswer"
-        class="shadow-none"
-        :value="1"
-        v-model="goodAnswer"
-        @click="goodAnswer = 1"
-      />
-      <input
-        type="text"
-        v-model="a2"
-        placeholder="Question N°2"
-        class="bg-gray-100 rounded p-1"
-      />
-
-      <input
-        type="radio"
-        name="goodAnswer"
-        class="shadow-none"
-        :value="2"
-        v-model="goodAnswer"
-        @click="goodAnswer = 2"
-      />
-      <input
-        type="text"
-        v-model="a3"
-        placeholder="Question N°3"
-        class="bg-gray-100 rounded p-1"
-      />
-
-      <input
-        type="radio"
-        name="goodAnswer"
-        class="shadow-none"
-        :value="3"
-        v-model="goodAnswer"
-        @click="goodAnswer = 3"
-      />
-      <input
-        type="text"
-        v-model="a4"
-        placeholder="Question N°4"
-        class="bg-gray-100 rounded p-1"
-      />
+      <div
+        class="flex flex-wrap flex-row gap-2 text-center justify-center items-center m-8"
+      >
+        <div class="flex flex-row items-center gap-2">
+          <input
+            type="radio"
+            name="goodAnswer"
+            class="shadow-none"
+            :value="0"
+            v-model="goodAnswer"
+            checked
+            @click="goodAnswer = 0"
+          />
+          <input
+            type="text"
+            v-model="a1"
+            placeholder="Question N°1"
+            class="bg-gray-100 rounded p-1"
+          />
+        </div>
+        <div class="flex flex-row items-center gap-2">
+          <input
+            type="radio"
+            name="goodAnswer"
+            class="shadow-none"
+            :value="1"
+            v-model="goodAnswer"
+            @click="goodAnswer = 1"
+          />
+          <input
+            type="text"
+            v-model="a2"
+            placeholder="Question N°2"
+            class="bg-gray-100 rounded p-1"
+          />
+        </div>
+        <div class="flex flex-row items-center gap-2">
+          <input
+            type="radio"
+            name="goodAnswer"
+            class="shadow-none"
+            :value="2"
+            v-model="goodAnswer"
+            @click="goodAnswer = 2"
+          />
+          <input
+            type="text"
+            v-model="a3"
+            placeholder="Question N°3"
+            class="bg-gray-100 rounded p-1"
+          />
+        </div>
+        <div class="flex flex-row items-center gap-2">
+          <input
+            type="radio"
+            name="goodAnswer"
+            class="shadow-none"
+            :value="3"
+            v-model="goodAnswer"
+            @click="goodAnswer = 3"
+          />
+          <input
+            type="text"
+            v-model="a4"
+            placeholder="Question N°4"
+            class="bg-gray-100 rounded p-1"
+          />
+        </div>
+      </div>
       <label for="type-rental">Theme:</label>
       <select
         name="Theme"
         v-model="themesValue"
-        class="bg-gray-100 rounded p-1"
+        class="bg-gray-100 rounded p-1 mb-4"
       >
         <option v-for="theme in themes" :key="theme.ID_Theme">
           {{ theme.Title_Theme }}
@@ -122,11 +146,38 @@ const a4 = ref("");
 const goodAnswer = ref(0);
 const themes = ref(null);
 const themesValue = ref("");
+const searchBar = ref("");
+const themesSearchValue = ref("");
 
 const quizes = ref([]);
 const questions = computed(() => {
   return [a1, a2, a3, a4];
 });
+
+const sortedQuizes = computed(() => {
+  return quizes.value.filter((quiz) => sortQuizes(quiz));
+});
+
+function reset() {
+  searchBar.value = "";
+  themesSearchValue.value = "";
+}
+
+function sortQuizes(quiz) {
+  if (
+    themesSearchValue.value == "" ||
+    quiz.themes[0].Title_Theme == themesSearchValue.value
+  ) {
+    if (searchBar.value == "") return true;
+    if (
+      quiz.Question_Quiz.toLowerCase().includes(searchBar.value.toLowerCase())
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  } else return false;
+}
 
 async function getQuizes() {
   const tempValue = await api.get(`/quiz`);
@@ -141,6 +192,7 @@ async function getThemes() {
 onBeforeMount(async () => {
   await getQuizes();
   await getThemes();
+  console.log(sortedQuizes.value);
 });
 
 async function changeAnswer(answer, quiz, goodAnswer) {
