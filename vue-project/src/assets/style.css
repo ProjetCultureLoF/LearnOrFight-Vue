@@ -26,7 +26,7 @@
         @apply bg-[#BF6415] hover:bg-[#bf6415ec] rounded p-1 duration-200;
     }
     p{
-        @apply text-[#000000] md:text-xl xs:text-lg font-normal;
+        @apply text-[#000000] lg:text-xl md:text-xs xs:text-lg font-normal;
     }
     label{
       @apply text-3xl font-medium;
