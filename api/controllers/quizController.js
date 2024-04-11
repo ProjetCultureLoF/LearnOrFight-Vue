@@ -1,4 +1,4 @@
-const { Quiz, Answer } = require("../models/game/quizAnswerModel");
+const { Quiz, Answer, QuizAnswer } = require("../models/game/quizAnswerModel");
 const { Theme, ThemeQuiz } = require("../models/game/themeQuizModel");
 const { Department } = require("../models/client/departmentModel");
 
@@ -26,7 +26,11 @@ async function getAll(req, res) {
       include: [
         {
           model: Answer,
-          through: { attributes: [] },
+          include: [
+            {
+              model: QuizAnswer,
+            },
+          ],
         },
         {
           model: Theme,
@@ -53,7 +57,11 @@ async function getById(req, res) {
       include: [
         {
           model: Answer,
-          through: { attributes: [] },
+          include: [
+            {
+              model: QuizAnswer,
+            },
+          ],
         },
         {
           model: Theme,
@@ -133,11 +141,12 @@ async function patchQuiz(req, res) {
     const criteria = {};
     const { id } = req.params;
     if (Question_Quiz) {
-      criteria.Question_Quiz = Question_Quiz;
+      criteria.Question_Quiz = decodeURIComponent(Question_Quiz);
     }
     const quiz = await Quiz.update(criteria, { where: { ID_Quiz: id } });
 
     res.status(200).json(quiz);
+    console.log("Question: ", Question_Quiz);
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
