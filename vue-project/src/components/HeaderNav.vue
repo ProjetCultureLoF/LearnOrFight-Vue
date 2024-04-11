@@ -3,9 +3,13 @@
     class="flex flex-row justify-between items-center p-2 bg-[#a76a30] shadow-lg w-full"
   >
     <router-link to="/" class="mt-2">
-      <img class="h-20" src="/src/assets/logo/lof-logo.png" alt="Logo" />
+      <img
+        class="xl:h-20 lg:h-14 xs:h-14"
+        src="/src/assets/logo/lof-logo.png"
+        alt="Logo"
+      />
     </router-link>
-    <router-link to="/clans" v-if="isAdmin" class="text-white"
+    <router-link to="/clans" v-if="isConnected" class="text-white"
       >Clans</router-link
     >
     <router-link to="/admin" v-if="isAdmin" class="text-white"
@@ -13,11 +17,17 @@
     >
 
     <nav class="m-4">
-      <ul v-if="!isConnected" class="flex gap-4">
-        <a href="#" @click="showLogin = true" class="text-white"
+      <ul v-if="!isConnected" class="flex gap-10">
+        <a
+          href="#"
+          @click="showLogin = true"
+          class="text-white hover:text-black duration-200"
           >Se connecter</a
         >
-        <a href="#" @click="showRegister = true" class="text-white"
+        <a
+          href="#"
+          @click="showRegister = true"
+          class="text-white hover:text-black duration-200"
           >S'inscrire</a
         >
       </ul>
@@ -28,7 +38,15 @@
         @mouseleave="dropdownVisible = false"
       >
         <li class="list-none">
-          <a href="#" class="text-white font-serif">{{ accountName }}</a>
+          <a
+            href="#"
+            class="font-serif duration-200"
+            :class="{
+              'text-black': dropdownVisible == true,
+              'text-white': dropdownVisible == false,
+            }"
+            >{{ accountName }}</a
+          >
           <ul
             v-if="dropdownVisible"
             class="absolute bg-[#BF6415] min-w-max shadow-lg z-10 right-0 rounded-md top-full"
@@ -65,7 +83,7 @@
         @click="close"
       />
       <h2>On s'est déjà vu?</h2>
-      <form @submit.prevent="login" class="flex flex-col gap-5">
+      <form @submit.prevent="login" class="flex flex-col gap-5 items-center">
         <div class="flex flex-col gap-5">
           <input
             id="username"
@@ -104,35 +122,43 @@
         class="self-end w-8 hover:w-10 duration-200"
         @click="close"
       />
-      <h2>Première visite ?</h2>
-      <form @submit.prevent="register" class="flex flex-col gap-5">
-        <input
-          id="reg-username"
-          v-model="username"
-          type="text"
-          required
-          placeholder="Nom d'utilisateur"
-        />
+      <div class="flex flex-col text-center items-center z-50 gap-7">
+        <h2>Première visite ?</h2>
+        <form
+          @submit.prevent="register"
+          class="flex flex-col gap-5 items-center"
+        >
+          <input
+            id="reg-username"
+            v-model="username"
+            type="text"
+            required
+            placeholder="Nom d'utilisateur"
+          />
 
-        <input
-          id="reg-email"
-          v-model="mail"
-          type="email"
-          placeholder="mail@exemple.com"
-          required
-        />
-        <input
-          id="reg-password"
-          v-model="password"
-          type="password"
-          required
-          placeholder="Mot de passe"
-        />
-        <div v-if="registerError" class="error-message">
-          {{ registerError }}
-        </div>
-        <button class="custom-button" type="submit">S'inscrire</button>
-      </form>
+          <input
+            id="reg-email"
+            v-model="mail"
+            type="email"
+            placeholder="mail@exemple.com"
+            required
+          />
+          <input
+            id="reg-password"
+            v-model="password"
+            type="password"
+            required
+            placeholder="Mot de passe"
+          />
+          <div v-if="registerError" class="error-message">
+            {{ registerError }}
+          </div>
+          <button class="custom-button" type="submit">S'inscrire</button>
+        </form>
+      </div>
+      <!-- <div v-else>
+        <Clans></Clans>
+      </div> -->
     </div>
   </transition>
   <Overlay v-if="showLogin || showRegister" />
@@ -144,9 +170,12 @@ import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { api } from "@/plugins/requete.js";
 import Overlay from "@/components/Overlay.vue";
+import Clans from "@/components/Clans.vue";
+import { useRouter } from "vue-router";
 import router from "@/router";
+
 export default {
-  components: { Overlay },
+  components: { Overlay, Clans },
   emits: ["isConnectedChange"],
   setup(props, { emit }) {
     const isConnected = ref(false);
@@ -162,6 +191,8 @@ export default {
     const dropdownVisible = ref(false);
     const loginError = ref("");
     const registerError = ref("");
+    // const registerPhase = ref(true);
+    const router = useRouter();
 
     const isConnectedComp = computed(() => {
       return isConnected.value;
@@ -214,14 +245,16 @@ export default {
 
       api
         .post(
-          `/users/${username.value}/${mail.value}/${hashedPassword}/${tokenValue}/1/2`
+          `/users/${username.value}/${mail.value}/${hashedPassword}/${tokenValue}/false/2`
         )
         .then(() => {
           Cookies.set("token", tokenValue, { expires: 7 });
           accountName.value = username.value;
           isConnected.value = true;
+          // registerPhase.value = false;
           close();
           emit("isConnectedChange", isConnected.value);
+          router.push("/clans");
         })
         .catch((error) => {
           console.error(error);
@@ -285,6 +318,7 @@ export default {
       dropdownVisible,
       loginError,
       registerError,
+      // registerPhase,
       register,
       logginUser,
       logout,
