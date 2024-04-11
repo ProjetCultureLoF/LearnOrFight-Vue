@@ -69,6 +69,7 @@ async function getAll(req, res) {
         [Sequelize.fn("MAX", Sequelize.col("User_Score")), "maxScore"],
       ],
       group: ["userIDUser"],
+      order: [["maxScore", sort]],
       include,
     });
     const modifiedScores = scores.map((score) => ({
