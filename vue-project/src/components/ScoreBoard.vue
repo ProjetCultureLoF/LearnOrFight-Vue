@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative overflow-x-auto rounded-lg w-4/5 max-w-[750px] text-center"
+    class="relative overflow-x-auto rounded-lg w-4/5 max-w-[750px] min-w-[10px] text-center"
   >
     <h2 class="m-4">{{ title }}</h2>
     <table class="w-full text-sm text-left rtl:text-right text-black">
