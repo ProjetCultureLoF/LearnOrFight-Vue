@@ -3,7 +3,7 @@ import Home from "@/views/home.vue";
 import Departments from "@/views/Departments.vue";
 import NotFound from "@/views/pageNotFound.vue";
 import Admin from "@/views/AdminQuizz.vue";
-import Clans from "@/views/Clans.vue";
+import Clans from "@/views/ClansSelection.vue";
 
 import Account from "./views/Account.vue";
 // import Leaderboard from './components/Leaderboard.vue';
