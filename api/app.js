@@ -21,10 +21,13 @@ const randomize = require("./randomize");
 const port = 3001;
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || origin === "http://localhost:5173") {
-      // Permettre à localhost:5173 ou à toute origine si non spécifié
+    if (origin || !origin) {
+      // if (!origin || origin === "http://localhost:5173") {
+      console.log("Origine du type ?????: ", origin);
       callback(null, true);
     } else {
+      console.log("Origine du type ?????: ", origin);
+
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -57,8 +60,8 @@ app.use("/api/v1/userAnswers", userAnswersRoute);
 
 db.sync({ force: false })
   .then(() => {
-    app.listen(port, () => {
-      console.log(`Le serveur est bien lancé sur http://localhost:${port}`);
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`Le serveur est bien lancé sur http://0.0.0.0:${port}`);
     });
   })
   .catch((error) => {
