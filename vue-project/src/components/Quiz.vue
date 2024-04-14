@@ -9,7 +9,7 @@
         name="w3review"
         rows="4"
         cols="50"
-        class="bg-gray-100 p-1 w-[50vw] h-[5vh]"
+        class="bg-white p-1 w-[50vw] h-[5vh] text-center"
         v-model="newTitle"
         v-on:dblclick="changeTitle"
       ></textarea>

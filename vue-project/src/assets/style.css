@@ -20,10 +20,10 @@
         @apply xs:text-base md:text-2xl;
       }
     div {
-        @apply bg-[#ffe5d0];
+        @apply bg-[#ffe5d0] bg-slate-100;
     }
     button{
-        @apply bg-[#BF6415] hover:bg-[#bf6415ec] rounded p-1 duration-200;
+        @apply bg-[#273445] hover:bg-[#151e28] text-white rounded p-1 duration-200;
     }
     p{
         @apply text-[#000000] lg:text-xl md:text-xs xs:text-lg font-normal;
@@ -32,7 +32,7 @@
       @apply text-3xl font-medium;
     }
     input{
-      @apply border-b-2 bg-[#ffe5d0] text-black h-8 active:border-b-4 shadow p-5 pr-0 w-fit;
+      @apply border-b-2 bg-white text-black h-8 active:border-b-4 shadow p-5 pr-0 w-fit;
 
     }
 

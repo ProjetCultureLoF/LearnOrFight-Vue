@@ -4,7 +4,7 @@
   >
     <h2 class="m-4">{{ title }}</h2>
     <table class="w-full text-sm text-left rtl:text-right text-black">
-      <thead class="text-xs text-white uppercase bg-[#a76a30]">
+      <thead class="text-xs text-white uppercase bg-[#273445]">
         <tr>
           <th
             v-for="header in headers"
@@ -21,7 +21,7 @@
         <tr
           v-for="(item, index) in listScore"
           :key="index"
-          class="bg-white border-b border-[#a76a30]"
+          class="bg-white border-b border-[#273445]"
         >
           <td
             v-for="(header, headerIndex) in headers"

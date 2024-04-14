@@ -163,7 +163,7 @@ async function randomizeDepartmentQuiz() {
       include: { model: Theme, where: { Title_Theme } },
     });
 
-    if (Title_Theme == "Math") {
+    if (Title_Theme) {
       for (const department of departments) {
         const quizzes = await Quiz.findAll({
           include: { model: Theme, where: { Title_Theme } },

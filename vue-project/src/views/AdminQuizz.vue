@@ -9,7 +9,7 @@
         <select
           name="Theme"
           v-model="themesSearchValue"
-          class="bg-gray-100 rounded p-1"
+          class="bg-white rounded p-1 shadow border-b-2"
         >
           <option v-for="theme in themes" :key="theme.ID_Theme">
             {{ theme.Title_Theme }}
@@ -118,16 +118,13 @@
       <select
         name="Theme"
         v-model="themesValue"
-        class="bg-gray-100 rounded p-1 mb-4"
+        class="bg-white rounded p-1 mb-4"
       >
         <option v-for="theme in themes" :key="theme.ID_Theme">
           {{ theme.Title_Theme }}
         </option>
       </select>
-      <button
-        @click="createQuiz"
-        class="bg-[#5b90b3cc] hover:bg-[#467798cc] duration-200 rounded-md p-2"
-      >
+      <button @click="createQuiz" class="duration-200 rounded-md p-2">
         Créer quiz
       </button>
     </div>
@@ -138,6 +135,9 @@
 import { computed, onBeforeMount, ref } from "vue";
 import Quiz from "@/components/Quiz.vue";
 import { api } from "@/plugins/requete";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const quizName = ref("");
 const a1 = ref("");
 const a2 = ref("");
@@ -193,6 +193,7 @@ onBeforeMount(async () => {
   await getQuizes();
   await getThemes();
   console.log(sortedQuizes.value);
+  console.log(router.currentRoute.value);
 });
 
 async function changeAnswer(answer, quiz, goodAnswer) {

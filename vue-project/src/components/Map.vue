@@ -1,5 +1,11 @@
 <template>
   <div class="flex flex-col items-center justify-center">
+    <p class="text-xs">
+      Possible grace à GeoJSON
+      <a href="https://github.com/gregoiredavid/france-geojson" class="text-xs">
+        - GitHub</a
+      >
+    </p>
     <div
       id="map"
       class="bg-blue-400 rounded-lg border-black border-2 m-5 p-2"
@@ -127,8 +133,9 @@ async function drawMap() {
         .html(
           d.properties.nom + " - " + departements.value.get(d.properties.code)
         )
-        .style("left", event.pageX + 28 + "px")
-        .style("top", event.pageY - 28 + "px");
+        .style("left", event.pageX + 14 + "px")
+        .style("top", event.pageY - 28 + "px")
+        .style("font-size", "1.5vh");
     })
     .on("mouseout", (d) => {
       tooltip.style("opacity", 0);

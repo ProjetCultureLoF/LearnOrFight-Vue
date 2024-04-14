@@ -1,27 +1,38 @@
 <template>
   <div
-    class="flex flex-row justify-between items-center p-2 bg-[#a76a30] shadow-lg w-full"
+    class="flex flex-row items-center p-2 bg-[#273445] shadow-lg w-[100vw] xl:max-h-24 lg:max-h-18 xs:max-h-18"
   >
-    <router-link to="/" class="mt-2">
-      <img
-        class="xl:h-20 lg:h-14 xs:h-14"
-        src="/src/assets/logo/lof-logo.png"
-        alt="Logo"
-      />
-    </router-link>
-    <router-link to="/clans" v-if="isConnected" class="text-white"
-      >Clans</router-link
-    >
-    <router-link :to="'/admin/' + token" v-if="isAdmin" class="text-white"
-      >Créer quizz</router-link
-    >
+    <div class="flex flex-row bg-inherit w-[100vw] items-center">
+      <router-link to="/" class="mt-2">
+        <img
+          class="h-20 hover:md:h-[5.5rem] duration-200"
+          src="/src/assets/logo/lof-logo.png"
+          alt="Logo"
+        />
+      </router-link>
+      <div class="bg-transparent flex gap-10 items-center justify-center pl-10">
+        <router-link
+          to="/clans"
+          v-if="isConnected"
+          class="text-white relative inline cursor-pointer text-xl font-medium before:bg-white before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
+        >
+          Clans</router-link
+        >
+        <router-link
+          :to="'/admin/' + token"
+          v-if="isAdmin"
+          class="text-white relative inline cursor-pointer text-xl font-medium before:bg-white before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
+          >Créer quizz</router-link
+        >
+      </div>
+    </div>
 
-    <nav class="m-4">
-      <ul v-if="!isConnected" class="flex gap-10">
+    <nav class="m-4 items-center">
+      <ul v-if="!isConnected" class="flex gap-10 items-center">
         <a
           href="#"
           @click="showLogin = true"
-          class="text-white hover:text-black duration-200"
+          class="text-white hover:text-black duration-200 text-nowrap"
           >Se connecter</a
         >
         <a
@@ -37,24 +48,32 @@
         @mouseover="dropdownVisible = true"
         @mouseleave="dropdownVisible = false"
       >
-        <li class="list-none">
+        <li class="list-none flex flex-row items-center gap-2">
           <a
             href="#"
-            class="font-serif duration-200"
+            class="font-serif duration-200 text-white"
             :class="{
-              'text-black': dropdownVisible == true,
-              'text-white': dropdownVisible == false,
+              '': dropdownVisible == true,
             }"
             >{{ accountName }}</a
           >
+          <img
+            src="/src/assets/icons/down_arrow.png"
+            alt=""
+            class="h-4 duration-200"
+            :class="{
+              'rotate-0 text-shadow-lg shadow-white': dropdownVisible == true,
+              'rotate-180': dropdownVisible == false,
+            }"
+          />
           <ul
             v-if="dropdownVisible"
-            class="absolute bg-[#BF6415] min-w-max shadow-lg z-10 right-0 rounded-md top-full"
+            class="absolute bg-[#273445] min-w-max shadow-lg z-10 right-0 rounded-md top-full"
           >
             <li>
               <router-link
                 to="/account"
-                class="dropdown-text rounded-md block px-4 py-3 text-red-100 duration-100 hover:font-bold hover:shadow"
+                class="dropdown-text rounded-md block px-4 py-3 text-white duration-100 hover:font-bold hover:shadow"
                 >Compte</router-link
               >
             </li>
@@ -62,7 +81,7 @@
               <router-link
                 to="/"
                 @click="logout"
-                class="dropdown-text rounded-md block px-4 py-3 text-red-100 duration-100 hover:font-bold hover:shadow"
+                class="dropdown-text rounded-md block px-4 py-3 text-white duration-100 hover:font-bold hover:shadow"
                 >Déconnexion</router-link
               >
             </li>
@@ -73,12 +92,12 @@
   </div>
   <transition name="fade">
     <div
-      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-3 pb-8 shadow-lg rounded-lg w-2/6 min-w-max h-fill flex flex-col text-center items-center z-50 gap-7"
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-3 pb-8 shadow-lg rounded-lg md:w-2/6 xs:w-4/6 min-w-max h-fill flex flex-col text-center items-center z-50 gap-7"
       v-if="showLogin"
     >
       <img
         src="/src/assets/icons/clair.png"
-        class="self-end w-8 hover:w-10 duration-200"
+        class="self-end md:w-8 xs:w-5 hover:w-10 duration-200"
         style="cursor: pointer"
         @click="close"
       />
@@ -104,7 +123,7 @@
         </div>
         <p v-if="loginError" class="break-all">{{ loginError }}</p>
 
-        <button class="bg-[#a76a30]" @click="logginUser" type="submit">
+        <button class="bg-[#273445]" @click="logginUser" type="submit">
           Se connecter
         </button>
       </form>
@@ -283,6 +302,7 @@ export default {
               .patch(`/users/${player.ID_User}?Token_User=${tokenValue}`)
               .then(() => {
                 Cookies.set("token", tokenValue, { expires: "" });
+                token.value = tokenValue;
                 isConnected.value = true;
                 accountName.value = response.data[0]["Name_User"];
                 close();
